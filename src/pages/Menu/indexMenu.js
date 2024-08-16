@@ -5,8 +5,9 @@ import HomeIcon from "../../assets/image/Icon/home.png";
 import SearchIcon from "../../assets/image/Icon/search.png";
 import CancelIcon from "../../assets/image/Icon/close.png";
 import { useNavigate } from "react-router-dom";
+import DetailProduct from "../../components/DetailProduct/index";
 import useEmblaCarousel from "embla-carousel-react";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import food from "../../assets/image/Icon/fast-food-19.png";
 import plus from "../../assets/image/Icon/plus.png";
 import minus from "../../assets/image/Icon/minus.png";
@@ -17,15 +18,13 @@ function Menu() {
   const navigate = useNavigate();
   const testToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6Imh1eSIsInBob25lbnVtYmVyIjoiOTk5OTk5OSIsImVtYWlsIjoibmd1eWVucXVhbmdodXltdDFAZ21haWwuY29tIiwiYWdlIjoyMCwiYWRkcmVzcyI6Ik5hbSDEkOG7i25oIiwicGFzc3dvcmQiOiIkMmIkMDgkN243SDRyR1RoeEtyQnpHZlNRTUJIdVpTemNIaXg3dVhrVW1mem95RGJrRFhYMnlCaC4wUnEiLCJjcmVhdGVkQXQiOiIyMDI0LTA4LTA0VDA3OjAyOjEwLjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTA4LTA0VDA3OjAyOjEwLjAwMFoiLCJpYXQiOjE3MjI4ODAwMzUsImV4cCI6MTcyMzEzOTIzNX0.htOR7x6r8Va2fm2XR1oGIAiV-CU46AqkUX-pYKZL3fk";
-  const token = localStorage.getItem("token") || testToken;
+  const token = localStorage.getItem("token") || "";
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
 
   const [emblaRef] = useEmblaCarousel({ dragFree: true });
   // Khởi tạo biến theo dõi cart
-  const [hasItemsInCart, setHasItemsInCart] = useState(false);
-  const [totalCartQuantity, setTotalCartQuantity] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [reloadCart, setReloadCart] = useState(false);
   // Khởi tạo biến theo dõi page và số lượng page tối đa
@@ -42,6 +41,10 @@ function Menu() {
 
   // Khởi tạo trạng thái cho biến theo dõi category
   const [currentCategoryId, setCurrentCategoryId] = useState(0);
+
+  // Khởi tạo các biến dùng cho detail product
+  const [showDetailProduct, setShowDetailProduct] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   //get all category list
   // Fetch category list
@@ -77,8 +80,6 @@ function Menu() {
         const response = await axios.get(url, config);
         const data = response.data;
         if (data && data.status === 200) {
-          console.log(data);
-
           setDishList(data.data.dishes);
           setMaxPages(data.data.pagesNumber);
           if (searchText !== "") {
@@ -120,12 +121,6 @@ function Menu() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [currentPage, maxPages]);
 
-  //check cart
-  useEffect(() => {
-    // Gọi hàm kiểm tra khi component mount
-    checkCartContents();
-  }, []);
-
   useEffect(() => {
     const loadCartItems = () => {
       const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -134,25 +129,6 @@ function Menu() {
 
     loadCartItems();
   }, [reloadCart]);
-
-  // Hàm để kiểm tra nội dung giỏ hàng
-  const checkCartContents = () => {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    setReloadCart(!reloadCart);
-    if (cart && cart.length > 0) {
-      setHasItemsInCart(true);
-      const totalQuantity = cart.reduce(
-        (total, item) => total + item.cartQuantity,
-        0
-      );
-
-      // Cập nhật trạng thái với tổng số lượng sản phẩm
-      setTotalCartQuantity(totalQuantity);
-    } else {
-      setHasItemsInCart(false);
-      setTotalCartQuantity(0);
-    }
-  };
 
   const handleScroll = () => {
     if (
@@ -183,6 +159,29 @@ function Menu() {
     setCurrentCategoryId(category.id);
   };
 
+  function addToCartLocalWithNote(product, quantity, note) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingItemIndex = cart.findIndex((x) => x.id === product.id);
+
+    if (existingItemIndex !== -1) {
+      // Nếu sản phẩm đã có trong giỏ, cập nhật thông tin mới
+      cart[existingItemIndex].cartQuantity = quantity;
+      cart[existingItemIndex].note = note;
+    } else {
+      // Nếu sản phẩm chưa có trong giỏ, thêm mới
+      const newItem = {
+        ...product,
+        cartQuantity: quantity,
+        note: note,
+      };
+      cart.push(newItem);
+    }
+
+    // Lưu giỏ hàng trở lại vào Local Storage
+    localStorage.setItem("cart", JSON.stringify(cart));
+    setReloadCart(!reloadCart); // Giả sử bạn đã định nghĩa state này ở đâu đó để re-render
+  }
+
   function addToLocalCart(item, type) {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
@@ -192,7 +191,6 @@ function Menu() {
       //Cập nhật số lượng dựa trên type
       if (type === "ADD") {
         cart[existingItemIndex].cartQuantity += 1;
-        checkCartContents();
       } else if (type === "MINUS") {
         if (
           cart[existingItemIndex].cartQuantity > 1 &&
@@ -200,11 +198,9 @@ function Menu() {
         ) {
           // Giảm số lượng nếu lớn hơn 1
           cart[existingItemIndex].cartQuantity -= 1;
-          checkCartContents();
         } else {
           // Xóa sản phẩm khỏi giỏ hàng nếu số lượng về 0
           cart.splice(existingItemIndex, 1);
-          checkCartContents();
         }
       }
     } else {
@@ -215,19 +211,48 @@ function Menu() {
         note: "", // Sử dụng note từ đầu vào
       };
       cart.push(newItem);
-      checkCartContents();
     }
 
     // Lưu giỏ hàng trở lại vào Local Storage
     localStorage.setItem("cart", JSON.stringify(cart));
+    setReloadCart(!reloadCart);
   }
+
+  const handleCloseDetail = () => {
+    setShowDetailProduct(false);
+    setSelectedProduct(null);
+  };
+
+  const handleOpenDetail = (product, e) => {
+    e.stopPropagation(); // Ngăn sự kiện nổi bọt
+    setSelectedProduct(product);
+    setShowDetailProduct(true);
+  };
+
+  const handleActionClick = (e) => {
+    e.stopPropagation(); // Ngăn sự kiện nổi bọt để không kích hoạt hàm handleOpenDetail khi nhấn vào các nút trong 'action-with-item-in-cart'
+  };
 
   return (
     <div className={cx("page-menu-restaurant")}>
+      {showDetailProduct && (
+        <Fragment>
+          <div
+            className={cx("overlay")}
+            onClick={() => handleCloseDetail()}
+          ></div>
+          <DetailProduct
+            product={selectedProduct}
+            textConfirm={"Thêm vào giỏ"}
+            closeFunction={handleCloseDetail}
+            confirmFunction={addToCartLocalWithNote}
+          ></DetailProduct>
+        </Fragment>
+      )}
       <div className={cx("menu-top-bar")}>
         <div
           className={cx("return-home-container")}
-          onClick={() => navigate("/home/token")}
+          onClick={() => navigate(`/home/${token}`)}
         >
           <img src={HomeIcon} alt="Home" />
         </div>
@@ -272,7 +297,11 @@ function Menu() {
         <div className={cx("header-area")}></div>
         <div className={cx("dish-list-container")}>
           {dishList.map((dish, index) => (
-            <div key={dish.id + index} className={classNames("dish-container")}>
+            <div
+              key={dish.id + index}
+              className={classNames("dish-container")}
+              onClick={(e) => handleOpenDetail(dish, e)}
+            >
               <div className={classNames("image-container")}>
                 <img src={dish.image} alt="Ảnh" onError={handleImageError} />
               </div>
@@ -289,7 +318,10 @@ function Menu() {
                       <img
                         src={minus}
                         alt="Bớt"
-                        onClick={() => addToLocalCart(dish, "MINUS")}
+                        onClick={(e) => {
+                          handleActionClick(e);
+                          addToLocalCart(dish, "MINUS");
+                        }}
                       />
                     </div>
                     <div className={cx("cartQuantity")}>
@@ -302,7 +334,10 @@ function Menu() {
                       <img
                         src={plus}
                         alt="Thêm"
-                        onClick={() => addToLocalCart(dish, "ADD")}
+                        onClick={(e) => {
+                          handleActionClick(e);
+                          addToLocalCart(dish, "ADD");
+                        }}
                       />
                     </div>
                   </div>
@@ -312,7 +347,10 @@ function Menu() {
                     <img
                       src={plus}
                       alt="Thêm"
-                      onClick={() => addToLocalCart(dish, "ADD")}
+                      onClick={(e) => {
+                        handleActionClick(e);
+                        addToLocalCart(dish, "ADD");
+                      }}
                     />
                   </div>
                 )}

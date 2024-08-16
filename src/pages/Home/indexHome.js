@@ -19,6 +19,7 @@ import location from "../../assets/image/Icon/maps-and-flags.png";
 const cx = classNames.bind(styles);
 function HomePage() {
   const navigate = useNavigate();
+  const [name, setName] = useState("");
   const { token } = useParams();
   const [showRequestName, setShowRequestName] = useState(false);
   const options = {
@@ -27,14 +28,19 @@ function HomePage() {
   };
 
   useEffect(() => {
+    localStorage.setItem("token", token);
+  }, [token]);
+
+  useEffect(() => {
     const storedName = localStorage.getItem("cusName");
     if (!storedName) {
       setShowRequestName(true);
+    } else {
+      setName(storedName);
     }
-  }, []);
+  }, [showRequestName]);
 
   const handleNameSubmitted = (name) => {
-    console.log("Name submitted:", name);
     // Additional actions after name submission, like navigating to another page
     setShowRequestName(false);
   };
@@ -70,7 +76,7 @@ function HomePage() {
           <div className={cx("flag-1-1")}>
             <div className={cx("user-info")}>
               <div className={cx("hello")}>Chào buổi chiều </div>
-              <div className={cx("name")}>Tên Khách Hàng</div>
+              <div className={cx("name")}>{name}</div>
             </div>
             <div className={cx("table-info")}>
               <div className={cx("text")}>
