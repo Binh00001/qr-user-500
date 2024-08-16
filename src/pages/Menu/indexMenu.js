@@ -179,6 +179,7 @@ function Menu() {
 
     // Lưu giỏ hàng trở lại vào Local Storage
     localStorage.setItem("cart", JSON.stringify(cart));
+    handleCloseDetail();
     setReloadCart(!reloadCart); // Giả sử bạn đã định nghĩa state này ở đâu đó để re-render
   }
 

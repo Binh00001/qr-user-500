@@ -12,10 +12,13 @@ function DetailProduct({
   textConfirm,
   closeFunction,
   confirmFunction,
+  currentNote,
+  currentQuantity,
 }) {
-  console.log(product);
-  const [quantity, setQuantity] = useState(1); // Biến trạng thái để giữ số lượng
-  const [note, setNote] = useState(""); // Biến trạng thái để giữ ghi chú
+  const [quantity, setQuantity] = useState(
+    currentQuantity ? currentQuantity : 1
+  ); // Biến trạng thái để giữ số lượng
+  const [note, setNote] = useState(currentNote ? currentNote : ""); // Biến trạng thái để giữ ghi chú
 
   // Hàm tăng số lượng sản phẩm
   const incrementQuantity = () => {

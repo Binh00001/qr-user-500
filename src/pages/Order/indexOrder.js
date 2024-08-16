@@ -2,13 +2,17 @@ import classNames from "classnames";
 import axios from "axios";
 import styles from "./order.scss";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import leftArrow from "../../assets/image/Icon/left-arrow.png";
 import close from "../../assets/image/Icon/close grey.png";
+import DetailProduct from "../../components/DetailProduct/index";
 const cx = classNames.bind(styles);
 
 function Order() {
   const navigate = useNavigate();
+  // Khởi tạo các biến dùng cho detail product
+  const [showDetailProduct, setShowDetailProduct] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -38,8 +42,63 @@ function Order() {
     localStorage.setItem("cart", JSON.stringify([])); // Cập nhật Local Storage
   };
 
+  const handleCloseDetail = () => {
+    setShowDetailProduct(false);
+    setSelectedProduct(null);
+  };
+
+  const handleOpenDetail = (product, e) => {
+    e.stopPropagation(); // Ngăn sự kiện nổi bọt
+    setSelectedProduct(product);
+    setShowDetailProduct(true);
+  };
+
+  const handleActionClick = (e) => {
+    e.stopPropagation(); // Ngăn sự kiện nổi bọt để không kích hoạt hàm handleOpenDetail khi nhấn vào các nút trong 'action-with-item-in-cart'
+  };
+
+  function addToCartLocalWithNote(product, quantity, note) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingItemIndex = cart.findIndex((x) => x.id === product.id);
+
+    if (existingItemIndex !== -1) {
+      // Nếu sản phẩm đã có trong giỏ, cập nhật thông tin mới
+      cart[existingItemIndex].cartQuantity = quantity;
+      cart[existingItemIndex].note = note;
+    } else {
+      // Nếu sản phẩm chưa có trong giỏ, thêm mới
+      const newItem = {
+        ...product,
+        cartQuantity: quantity,
+        note: note,
+      };
+      cart.push(newItem);
+    }
+
+    // Lưu giỏ hàng trở lại vào Local Storage
+    localStorage.setItem("cart", JSON.stringify(cart));
+    handleCloseDetail();
+    setReloadCart(!reloadCart); // Giả sử bạn đã định nghĩa state này ở đâu đó để re-render
+  }
+
   return (
     <div className={cx("page-order-restaurant")}>
+      {showDetailProduct && (
+        <Fragment>
+          <div
+            className={cx("overlay")}
+            onClick={() => handleCloseDetail()}
+          ></div>
+          <DetailProduct
+            product={selectedProduct}
+            textConfirm={"Cập nhật"}
+            closeFunction={handleCloseDetail}
+            confirmFunction={addToCartLocalWithNote}
+            currentNote={selectedProduct.note}
+            currentQuantity={selectedProduct.cartQuantity}
+          ></DetailProduct>
+        </Fragment>
+      )}
       <div className={cx("order-top-bar")}>
         <div className={cx("order-return")} onClick={() => navigate("/menu")}>
           <img src={leftArrow} alt="Back"></img>
@@ -71,7 +130,12 @@ function Order() {
             <div className={cx("delete-div")} onClick={() => removeItem(index)}>
               <img src={close} alt="x"></img>
             </div>
-            <div className={cx("edit-text")}>Chỉnh sửa</div>
+            <div
+              className={cx("edit-text")}
+              onClick={(e) => handleOpenDetail(item, e)}
+            >
+              Chỉnh sửa
+            </div>
           </div>
         </div>
       ))}
