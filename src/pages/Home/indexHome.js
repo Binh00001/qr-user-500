@@ -5,6 +5,7 @@ import classNames from "classnames";
 import axios from "axios";
 import { Fragment } from "react";
 import RequestName from "../../components/RequestName";
+import CallStaffDialog from "../../components/CallStaffDialog/indexCallStaff";
 import InteractionItem from "../../components/InteractionItem/index";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
@@ -23,6 +24,9 @@ function HomePage() {
   const [phone, setPhone] = useState("");
   const { token } = useParams();
   const [showRequestName, setShowRequestName] = useState(false);
+  const [showCallStaffDialog, setShowCallStaffDialog] = useState(false);
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
+
   const options = {
     delay: 2000,
     // jump: true,
@@ -48,11 +52,26 @@ function HomePage() {
     setShowRequestName(false);
   };
 
+  const handleCloseCallStaffDialog = () => {
+    setShowCallStaffDialog(false);
+  };
+
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay(options)]);
 
   return (
     <div className={cx("page_home_restaurant")}>
       {showRequestName && <RequestName callback={handleNameSubmitted} />}
+      {showCallStaffDialog && (
+        <Fragment>
+          <div
+            className={cx("overlay")}
+            onClick={handleCloseCallStaffDialog}
+          ></div>
+          <CallStaffDialog
+            callback={handleCloseCallStaffDialog}
+          ></CallStaffDialog>
+        </Fragment>
+      )}
       <div className={cx("page--content")}>
         <Fragment>
           <div className={cx("restaurant-info-container")}>
@@ -100,13 +119,13 @@ function HomePage() {
               iconName={person}
               description="Gọi nhân viên"
               backgroundColor="#92B4EC"
-              // callback={() => openCallStaffDialog()}
+              callback={() => setShowCallStaffDialog(true)}
             />
             <InteractionItem
               iconName={comment}
               description="Đánh giá"
               backgroundColor="#AACB73"
-              // callback={() => openFeedBackDialog()}
+              // callback={() => openFeedbackDialog()}
             />
           </div>
           <div
