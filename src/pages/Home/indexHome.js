@@ -6,6 +6,7 @@ import axios from "axios";
 import { Fragment } from "react";
 import RequestName from "../../components/RequestName";
 import CallStaffDialog from "../../components/CallStaffDialog/indexCallStaff";
+import FeedbackDialog from "../../components/FeedbackDialog/indexFeedback";
 import InteractionItem from "../../components/InteractionItem/index";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
@@ -56,6 +57,10 @@ function HomePage() {
     setShowCallStaffDialog(false);
   };
 
+  const handelCloseFeedbackDialog = () => {
+    setShowFeedbackDialog(false);
+  };
+
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay(options)]);
 
   return (
@@ -70,6 +75,15 @@ function HomePage() {
           <CallStaffDialog
             callback={handleCloseCallStaffDialog}
           ></CallStaffDialog>
+        </Fragment>
+      )}
+      {showFeedbackDialog && (
+        <Fragment>
+          <div
+            className={cx("overlay")}
+            onClick={handelCloseFeedbackDialog}
+          ></div>
+          <FeedbackDialog callback={handelCloseFeedbackDialog}></FeedbackDialog>
         </Fragment>
       )}
       <div className={cx("page--content")}>
@@ -125,7 +139,7 @@ function HomePage() {
               iconName={comment}
               description="Đánh giá"
               backgroundColor="#AACB73"
-              // callback={() => openFeedbackDialog()}
+              callback={() => setShowFeedbackDialog(true)}
             />
           </div>
           <div
