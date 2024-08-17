@@ -11,7 +11,7 @@ import Autoplay from "embla-carousel-autoplay";
 import banner1 from "../../assets/image/banner1.png";
 import banner2 from "../../assets/image/banner2.png";
 import banner3 from "../../assets/image/banner3.png";
-import billing from "../../assets/image/Icon/billing.png";
+import billing from "../../assets/image/Icon/bill.png";
 import comment from "../../assets/image/Icon/comment.png";
 import person from "../../assets/image/Icon/user.png";
 import food from "../../assets/image/Icon/fast-food.png";
@@ -92,18 +92,21 @@ function HomePage() {
           <div className={cx("interaction--container")}>
             <InteractionItem
               iconName={billing}
-              description="Gọi thanh toán"
+              description="Xem hoá đơn"
               backgroundColor="#FFB72B"
+              callback={() => navigate("/bill")}
             />
             <InteractionItem
               iconName={person}
               description="Gọi nhân viên"
               backgroundColor="#92B4EC"
+              // callback={() => openCallStaffDialog()}
             />
             <InteractionItem
               iconName={comment}
               description="Đánh giá"
               backgroundColor="#AACB73"
+              // callback={() => openFeedBackDialog()}
             />
           </div>
           <div

@@ -4,9 +4,14 @@ import styles from "./InteractionItem.scss";
 
 const cx = classNames.bind(styles);
 
-const InteractionItem = ({ iconName, description, backgroundColor }) => {
+const InteractionItem = ({
+  iconName,
+  description,
+  backgroundColor,
+  callback,
+}) => {
   return (
-    <div className={cx("interaction-item")}>
+    <div className={cx("interaction-item")} onClick={callback}>
       <div
         className={cx("image-background")}
         style={{ backgroundColor: backgroundColor }}
