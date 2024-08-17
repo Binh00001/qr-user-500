@@ -20,6 +20,7 @@ const cx = classNames.bind(styles);
 function HomePage() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const { token } = useParams();
   const [showRequestName, setShowRequestName] = useState(false);
   const options = {
@@ -33,19 +34,22 @@ function HomePage() {
 
   useEffect(() => {
     const storedName = localStorage.getItem("cusName");
-    if (!storedName) {
+    const storedPhone = localStorage.getItem("cusPhone");
+    if (!storedName || !storedPhone) {
       setShowRequestName(true);
     } else {
       setName(storedName);
+      setPhone(storedPhone);
     }
   }, [showRequestName]);
 
-  const handleNameSubmitted = (name) => {
+  const handleNameSubmitted = () => {
     // Additional actions after name submission, like navigating to another page
     setShowRequestName(false);
   };
 
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay(options)]);
+
   return (
     <div className={cx("page_home_restaurant")}>
       {showRequestName && <RequestName callback={handleNameSubmitted} />}

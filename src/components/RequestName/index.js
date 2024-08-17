@@ -7,30 +7,51 @@ const cx = classNames.bind(styles);
 
 function RequestName({ callback }) {
   const [userName, setUserName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [isReady, setIsReady] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
 
-  const handleClear = () => {
+  const handleClearUserName = () => {
     // Clear the userName from the component state
     setUserName("");
-
     // Remove the userName from local storage
     localStorage.removeItem("cusName");
   };
 
+  const handleClearPhoneNumber = () => {
+    // Clear the phoneNumber from the component state
+    setPhoneNumber("");
+    setPhoneError("");
+    // Remove the phoneNumber from local storage
+    localStorage.removeItem("cusPhone");
+  };
+
+  const validatePhoneNumber = (number) => {
+    const phoneRegex = /^0\d{9}$/; // Regex to check if the number starts with 0 and is followed by 9 digits
+    return phoneRegex.test(number);
+  };
+
   useEffect(() => {
-    if (userName !== "") {
+    if (userName !== "" && validatePhoneNumber(phoneNumber)) {
       setIsReady(true);
+      setPhoneError(""); // Clear error if the phone number is valid
     } else {
       setIsReady(false);
+      if (phoneNumber && !validatePhoneNumber(phoneNumber)) {
+        setPhoneError("Số điện thoại không hợp lệ. Vui lòng nhập lại.");
+      } else {
+        setPhoneError("");
+      }
     }
-  }, [userName]);
+  }, [userName, phoneNumber]);
 
   const handleSubmit = () => {
-    // Save the username to local storage
+    // Save the username and phone number to local storage
     if (isReady) {
       localStorage.setItem("cusName", userName);
+      localStorage.setItem("cusPhone", phoneNumber);
       if (callback) {
-        callback(userName);
+        callback();
       }
     }
   };
@@ -42,7 +63,8 @@ function RequestName({ callback }) {
       </div>
       <div className={cx("welcome-text")}>Chào mừng bạn đến Tên cửa hàng!</div>
       <div className={cx("welcome-subtext")}>
-        Mời bạn nhập tên để nhà hàng phục vụ bạn nhanh chóng hơn, chính xác hơn
+        Mời bạn nhập tên và số điện thoại để nhà hàng phục vụ bạn nhanh chóng
+        hơn, chính xác hơn
       </div>
       <div className={cx("input-container")}>
         <input
@@ -53,13 +75,29 @@ function RequestName({ callback }) {
           }}
           placeholder="Nhập tên của bạn"
         />
-        {isReady && <img src={clearIcon} alt="Clear" onClick={handleClear} />}
+        {userName && (
+          <img src={clearIcon} alt="Clear" onClick={handleClearUserName} />
+        )}
+      </div>
+      <div className={cx("input-container")}>
+        <input
+          value={phoneNumber}
+          maxLength={10}
+          onChange={(e) => {
+            setPhoneNumber(e.target.value);
+            localStorage.setItem("cusPhone", e.target.value);
+          }}
+          placeholder="Nhập số điện thoại của bạn"
+        />
+        {phoneNumber && (
+          <img src={clearIcon} alt="Clear" onClick={handleClearPhoneNumber} />
+        )}
+        {phoneError && <div className={cx("error-text")}>{phoneError}</div>}
       </div>
       <button
         className={cx("start-button")}
-        onClick={() => {
-          handleSubmit();
-        }}
+        onClick={handleSubmit}
+        disabled={!isReady}
       >
         Bắt đầu
       </button>
