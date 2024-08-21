@@ -6,6 +6,7 @@ import Bill from "../pages/Bill/indexBill.js";
 import AdminHomePage from "../admin/admin_pages/home/AdminHome.js";
 import AdminLoginScreen from "../admin/admin_login_screen/index.js";
 import Category from "../admin/admin_pages/category/index.js";
+import TableManagement from "../admin/admin_pages/table_managament/index.js";
 export const publicRoutes = [
   { path: "/home/:token", component: Home },
   { path: "/menu", component: Menu },
@@ -16,4 +17,5 @@ export const publicRoutes = [
   { path: "/adminhome", component: AdminHomePage },
   { path: "/adminhome", component: AdminHomePage },
   { path: "/adminhome/category", component: Category },
+  { path: "/adminhome/table", component: TableManagement },
 ];

@@ -54,10 +54,7 @@ const AdminLayout = ({ children }) => {
             {isTableManagementOpen && (
               <ul className="sidebar-submenu">
                 <li>
-                  <a href="/create-table">Tạo bàn</a>
-                </li>
-                <li>
-                  <a href="/table-list">Danh sách bàn</a>
+                  <a href="/adminhome/table">Danh sách bàn</a>
                 </li>
               </ul>
             )}
