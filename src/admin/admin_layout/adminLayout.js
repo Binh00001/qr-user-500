@@ -72,7 +72,7 @@ const AdminLayout = ({ children }) => {
             {isProductManagementOpen && (
               <ul className="sidebar-submenu">
                 <li>
-                  <a href="/product-categories">Danh mục</a>
+                  <a href="/adminhome/category">Danh mục</a>
                 </li>
                 <li>
                   <a href="/product-options">Tuỳ chọn</a>
