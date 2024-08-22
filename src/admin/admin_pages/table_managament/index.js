@@ -11,7 +11,7 @@ function TableManagement() {
   const [editTableId, setEditTableId] = useState(null);
   const [viewUuid, setViewUuid] = useState(null);
   const [tables, setTables] = useState([]);
-
+  const [reload, setReload] = useState(false);
   const authHeader = useAuthHeader();
 
   const config = {
@@ -27,6 +27,7 @@ function TableManagement() {
 
           if (data && data.status === 200) {
             setTables(data.listTable);
+            console.log(data.listTable);
           }
         })
         .catch((error) => {
@@ -35,7 +36,7 @@ function TableManagement() {
     };
 
     fetchTables();
-  }, []);
+  }, [reload]);
 
   const filteredTables = tables.filter(
     (table) =>
@@ -57,7 +58,32 @@ function TableManagement() {
       console.log("Updated Table:", editTableId, editTableName);
     } else {
       // Xử lý thêm bàn mới
-      console.log("Table Name:", tableName);
+      const url = `${process.env.REACT_APP_API_URL}/v1/table`;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authHeader,
+        },
+      };
+      const data = { name: tableName, status: "active" };
+
+      axios
+        .post(url, data, config)
+        .then((response) => {
+          if (response.status === 200) {
+            console.log("Table created:", tableName, response.data);
+            alert(`Tạo bàn ${tableName} thành công!`);
+            setReload(!reload);
+          } else {
+            alert("Xảy ra lỗi khi tạo bàn! Có thể bàn đã tồn tại");
+          }
+
+          // Optionally refresh list or show success message
+        })
+        .catch((error) => {
+          alert("Xảy ra lỗi khi tạo bàn! Có thể bàn đã tồn tại");
+          // Optionally show error message
+        });
     }
     handleReset();
   };
@@ -215,7 +241,7 @@ function TableManagement() {
                   <label className="switch">
                     <input
                       type="checkbox"
-                      checked={table.active}
+                      checked={!table.active}
                       onChange={() => handleToggleActive(table.id)}
                     />
                     <span className="slider round"></span>
