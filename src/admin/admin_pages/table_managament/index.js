@@ -139,13 +139,8 @@ function TableManagement() {
     alert(`Copied UUID: ${uuid}`);
   };
 
-  const handleToggleActive = (id) => {
-    setTables((prevTables) =>
-      prevTables.map((table) =>
-        table.id === id ? { ...table, active: !table.active } : table
-      )
-    );
-    console.log("Toggled active state for Table ID:", id);
+  const handleToggleActive = (table) => {
+    console.log("Toggled active state for Table ID:", table);
   };
 
   const handleViewUuid = (id) => {
@@ -283,7 +278,7 @@ function TableManagement() {
                     <input
                       type="checkbox"
                       checked={!table.active}
-                      onChange={() => handleToggleActive(table.id)}
+                      onChange={() => handleToggleActive(table)}
                     />
                     <span className="slider round"></span>
                   </label>
