@@ -1,22 +1,54 @@
 import React, { useState } from "react";
 import "./AdminLoginScreen.css";
-
+import axios from "axios";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
+import { Navigate, useNavigate } from "react-router-dom";
 function AdminLoginScreen() {
   // State để lưu tài khoản, mật khẩu và lỗi
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
+  const signIn = useSignIn(); // Ensure useSignIn is called inside a React Component or hook
   // Hàm handleLogin để xử lý khi người dùng nhấn nút "Đăng nhập"
-  const handleLogin = () => {
-    if (account === "" || password === "") {
-      setError("Vui lòng nhập đầy đủ tài khoản và mật khẩu.");
-    } else {
-      setError("");
-      // Xử lý đăng nhập ở đây, ví dụ: gửi thông tin lên server
-      console.log("Đăng nhập với tài khoản:", account);
-      console.log("Mật khẩu:", password);
-    }
+  const handleLogin = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        "http://13.215.253.129:3000/v1/auth/login",
+        {
+          email: account,
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        const data = res.data;
+        if (res.data.status === 200) {
+          if (
+            signIn({
+              auth: {
+                token: data.data.accessToken,
+                type: "Bearer",
+              },
+              // refresh: res.data.refreshToken
+            })
+          ) {
+            navigate("/adminhome");
+            console.log("login");
+          } else {
+            alert("Đăng nhập thất bại");
+          }
+        }
+      })
+      .catch((error) => {
+        alert("Lỗi! Đăng nhập thất bại. Hãy kiểm tra thông tin đăng nhập.");
+        console.log("Login error:", error);
+      });
   };
 
   return (
@@ -54,7 +86,7 @@ function AdminLoginScreen() {
             />
           </div>
           {error && <p className="error-message">{error}</p>}
-          <button className="login-button" onClick={handleLogin}>
+          <button className="login-button" onClick={(e) => handleLogin(e)}>
             Đăng nhập
           </button>
         </div>

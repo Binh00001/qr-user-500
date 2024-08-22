@@ -21,11 +21,32 @@ const AppRoutes = () => {
         <Route path="/bill" element={<Bill />} />
         <Route path="/adminlogin" element={<AdminLoginScreen />} />
         {/* Bảo vệ các đường dẫn quản trị sử dụng RequireAuth */}
-        <Route element={<RequireAuth redirectTo="/adminlogin" />}>
-          <Route path="/adminhome" element={<AdminHomePage />} />
-          <Route path="/adminhome/category" element={<Category />} />
-          <Route path="/adminhome/table" element={<TableManagement />} />
-        </Route>
+        <Route
+          path="/adminhome"
+          element={
+            <RequireAuth fallbackPath="/adminlogin">
+              <AdminHomePage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/adminhome/category"
+          element={
+            <RequireAuth fallbackPath="/adminlogin">
+              <Category />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/adminhome/table"
+          element={
+            <RequireAuth fallbackPath="/adminlogin">
+              <TableManagement />
+            </RequireAuth>
+          }
+        />
       </Routes>
     </Router>
   );

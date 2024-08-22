@@ -4,8 +4,8 @@ import AdminLayout from "../../admin_layout/adminLayout";
 const AdminHomePage = () => {
   return (
     <AdminLayout>
-      <h2>Welcome to the Home Page</h2>
-      <p>This is the content of the home page.</p>
+      <h2>Đây là trang quản lý của bạn!</h2>
+      <p>Hãy bắt đầu bằng cách chọn một tác vụ bên trái.</p>
     </AdminLayout>
   );
 };
