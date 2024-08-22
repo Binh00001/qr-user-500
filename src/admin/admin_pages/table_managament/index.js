@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./TableManagement.css";
 import AdminLayout from "../../admin_layout/adminLayout";
-
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 function TableManagement() {
   const [tableName, setTableName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -9,33 +10,32 @@ function TableManagement() {
   const [editTableName, setEditTableName] = useState("");
   const [editTableId, setEditTableId] = useState(null);
   const [viewUuid, setViewUuid] = useState(null);
+  const [tables, setTables] = useState([]);
 
-  const [tables, setTables] = useState([
-    {
-      id: 1,
-      name: "Table 1",
-      uuid: "123e4567-e89b-12d3-a456-426614174000",
-      active: true,
-    },
-    {
-      id: 2,
-      name: "Table 2",
-      uuid: "123e4567-e89b-12d3-a456-426614174001",
-      active: false,
-    },
-    {
-      id: 3,
-      name: "Table 3",
-      uuid: "123e4567-e89b-12d3-a456-426614174002",
-      active: true,
-    },
-    {
-      id: 4,
-      name: "Table 4",
-      uuid: "123e4567-e89b-12d3-a456-426614174003",
-      active: false,
-    },
-  ]);
+  const authHeader = useAuthHeader();
+
+  const config = {
+    headers: { Authorization: authHeader },
+  };
+
+  useEffect(() => {
+    const fetchTables = async () => {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/v1/table/all`, config)
+        .then((response) => {
+          const data = response.data;
+
+          if (data && data.status === 200) {
+            setTables(data.listTable);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
+    fetchTables();
+  }, []);
 
   const filteredTables = tables.filter(
     (table) =>
@@ -85,7 +85,6 @@ function TableManagement() {
   const handleViewUuid = (id) => {
     setViewUuid(id === viewUuid ? null : id);
   };
-
   return (
     <AdminLayout>
       {!isEditing ? (
