@@ -24,10 +24,8 @@ function TableManagement() {
         .get(`${process.env.REACT_APP_API_URL}/v1/table/all`, config)
         .then((response) => {
           const data = response.data;
-
           if (data && data.status === 200) {
             setTables(data.listTable);
-            console.log(data.listTable);
           }
         })
         .catch((error) => {
@@ -55,7 +53,31 @@ function TableManagement() {
     event.preventDefault();
     if (isEditing) {
       // Xử lý lưu thông tin bàn khi chỉnh sửa
-      console.log("Updated Table:", editTableId, editTableName);
+      const url = `${process.env.REACT_APP_API_URL}/v1/table/${editTableId}`;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authHeader,
+        },
+      };
+      const data = { name: editTableName };
+
+      axios
+        .put(url, data, config)
+        .then((response) => {
+          if (response.status === 200) {
+            alert(`Tên bàn được đổi thành ${editTableName}`);
+            setReload(!reload);
+          } else {
+            alert("Xảy ra lỗi khi đổi tên bàn");
+          }
+          // Optionally refresh list or show success message
+        })
+        .catch((error) => {
+          alert("Xảy ra lỗi khi đổi tên bàn");
+          console.error("Error updating table:", error);
+          // Optionally show error message
+        });
     } else {
       // Xử lý thêm bàn mới
       const url = `${process.env.REACT_APP_API_URL}/v1/table`;
@@ -71,7 +93,6 @@ function TableManagement() {
         .post(url, data, config)
         .then((response) => {
           if (response.status === 200) {
-            console.log("Table created:", tableName, response.data);
             alert(`Tạo bàn ${tableName} thành công!`);
             setReload(!reload);
           } else {
@@ -94,6 +115,10 @@ function TableManagement() {
     setEditTableId(table.id);
   };
 
+  const handleDelete = (table) => {
+    console.log(table.id);
+  };
+
   const handleCopyUuid = (uuid) => {
     navigator.clipboard.writeText(uuid);
     alert(`Copied UUID: ${uuid}`);
@@ -111,6 +136,7 @@ function TableManagement() {
   const handleViewUuid = (id) => {
     setViewUuid(id === viewUuid ? null : id);
   };
+
   return (
     <AdminLayout>
       {!isEditing ? (
@@ -192,8 +218,8 @@ function TableManagement() {
               <th>Tên bàn</th>
               <th>UUID</th>
               <th>Trạng thái</th>
-              <th>Sửa</th>
-              <th>Delete</th>
+              <th>Sửa tên</th>
+              <th>Xoá bàn</th>
             </tr>
           </thead>
           <tbody>
@@ -256,7 +282,12 @@ function TableManagement() {
                   </button>
                 </td>
                 <td>
-                  <button className="delete-button">Xoá</button>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete(table)}
+                  >
+                    Xoá
+                  </button>
                 </td>
               </tr>
             ))}
