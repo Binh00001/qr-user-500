@@ -116,7 +116,22 @@ function TableManagement() {
   };
 
   const handleDelete = (table) => {
-    console.log(table.id);
+    const url = `${process.env.REACT_APP_API_URL}/v1/table/${table.id}`;
+    const config = {
+      headers: {
+        Authorization: authHeader,
+      },
+    };
+
+    axios
+      .delete(url, config)
+      .then((response) => {
+        alert(`Xoá bàn ${table.name} thành công.`);
+        setReload(!reload);
+      })
+      .catch((error) => {
+        alert("Xảy ra lỗi khi xoá bàn");
+      });
   };
 
   const handleCopyUuid = (uuid) => {
