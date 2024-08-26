@@ -15,6 +15,7 @@ import OrderManagement from "../admin/admin_pages/order_management/order_managem
 import OptionCategory from "../admin/admin_pages/option_category/option_category.js";
 import CreateProduct from "../admin/admin_pages/create_product/create_product.js";
 import ListProduct from "../admin/admin_pages/list_product/list_product.js";
+import Evaluate from "../admin/admin_pages/evaluate/evaluate.js";
 const AppRoutes = () => {
   return (
     <Router>
@@ -84,6 +85,15 @@ const AppRoutes = () => {
           element={
             <RequireAuth fallbackPath="/adminlogin">
               <ListProduct />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/adminhome/evaluate"
+          element={
+            <RequireAuth fallbackPath="/adminlogin">
+              <Evaluate />
             </RequireAuth>
           }
         />

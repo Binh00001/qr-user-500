@@ -28,7 +28,7 @@ const AdminLayout = ({ children }) => {
     } else if (
       path.includes("/revenue-stats") ||
       path.includes("/product-stats") ||
-      path.includes("/customer-stats")
+      path.includes("/adminhome/evaluate")
     ) {
       setIsFeedbackAndStatsOpen(true);
     } else if (path === "/adminhome") {
@@ -172,7 +172,7 @@ const AdminLayout = ({ children }) => {
                   <a href="/product-stats">Sản phẩm</a>
                 </li>
                 <li>
-                  <a href="/customer-stats">Khách hàng</a>
+                  <a href="/adminhome/evaluate">Khách hàng</a>
                 </li>
               </ul>
             )}
