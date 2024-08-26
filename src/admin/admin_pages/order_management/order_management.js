@@ -183,6 +183,7 @@ const OrderManagement = () => {
                     <th>Đơn giá</th>
                     <th>Số lượng</th>
                     <th>Thành tiền</th>
+                    <th>Ghi chú</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -194,6 +195,7 @@ const OrderManagement = () => {
                       <td>
                         {formatCurrency(dish.price * dish.orderdishes.quantity)}
                       </td>
+                      <td>{dish.orderdishes.note}</td>
                     </tr>
                   ))}
                 </tbody>
