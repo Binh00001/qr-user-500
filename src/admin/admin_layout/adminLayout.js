@@ -11,7 +11,6 @@ const AdminLayout = ({ children }) => {
   const [isRequestManagementOpen, setRequestManagementOpen] = useState(false);
 
   const location = useLocation();
-
   useEffect(() => {
     // Preserve menu state based on the path
     const path = location.pathname;
@@ -19,12 +18,12 @@ const AdminLayout = ({ children }) => {
       setIsTableManagementOpen(true);
     } else if (
       path.includes("/adminhome/category") ||
-      path.includes("/product-options") ||
-      path.includes("/create-product") ||
-      path.includes("/all-products")
+      path.includes("/adminhome/option") ||
+      path.includes("/adminhome/createproduct") ||
+      path.includes("/adminhome/listproduct")
     ) {
       setIsProductManagementOpen(true);
-    } else if (path.includes("/all-orders")) {
+    } else if (path.includes("/adminhome/order")) {
       setIsOrderManagementOpen(true);
     } else if (
       path.includes("/revenue-stats") ||

@@ -56,8 +56,6 @@ function ListProduct() {
 
       if (response.data.status === 200) {
         setProducts(response.data.data.dishes);
-        console.log(response.data.data.dishes);
-
         setTotalPages(response.data.data.pagesNumber);
       }
     } catch (error) {
@@ -185,8 +183,6 @@ function ListProduct() {
       return;
     }
 
-    console.log(formData);
-
     try {
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/v1/dish?id=${editingProduct.id}`,
@@ -195,7 +191,6 @@ function ListProduct() {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: authHeader, // Replace with your actual token
-            // id: editingProduct.category_id, // Assuming 'id' in the header is required
           },
         }
       );

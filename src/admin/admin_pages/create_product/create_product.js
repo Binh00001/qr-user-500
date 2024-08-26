@@ -90,7 +90,6 @@ function CreateProduct() {
           },
         }
       );
-      console.log(response);
 
       if (response.data.status === 200) {
         alert("Tạo sản phẩm thành công.");
