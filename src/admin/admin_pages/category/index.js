@@ -1,20 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./category.css";
 import AdminLayout from "../../admin_layout/adminLayout";
-
+import axios from "axios";
 function Category() {
   const [categoryName, setCategoryName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [editCategoryName, setEditCategoryName] = useState("");
   const [editCategoryId, setEditCategoryId] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const categories = [
-    { id: 1, name: "Test Category" },
-    { id: 2, name: "Banh Mi" },
-    { id: 3, name: "Hai San" },
-    { id: 4, name: "Spoon" },
-  ];
+  useEffect(() => {
+    // Define the async function to fetch data
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/v1/category/all`
+        );
+        console.log(response.data.listCategories);
+        if (response.data.status === 200) {
+          setCategories(response.data.listCategories); // Assuming response.data contains the categories
+          setLoading(false);
+        }
+      } catch (err) {
+        setError(err);
+        setLoading(false);
+      }
+    };
+
+    fetchCategories(); // Call the function to fetch data
+  }, []);
 
   const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
