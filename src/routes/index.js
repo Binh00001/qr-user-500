@@ -10,7 +10,8 @@ import Bill from "../pages/Bill/indexBill.js";
 import AdminLoginScreen from "../admin/admin_login_screen/index.js";
 import AdminHomePage from "../admin/admin_pages/home/AdminHome.js";
 import Category from "../admin/admin_pages/category/index.js";
-import TableManagement from "../admin/admin_pages/table_managament/index.js";
+import TableManagement from "../admin/admin_pages/table_management/index.js";
+import OrderManagement from "../admin/admin_pages/order_management/order_management.js";
 const AppRoutes = () => {
   return (
     <Router>
@@ -44,6 +45,15 @@ const AppRoutes = () => {
           element={
             <RequireAuth fallbackPath="/adminlogin">
               <TableManagement />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/adminhome/order"
+          element={
+            <RequireAuth fallbackPath="/adminlogin">
+              <OrderManagement />
             </RequireAuth>
           }
         />

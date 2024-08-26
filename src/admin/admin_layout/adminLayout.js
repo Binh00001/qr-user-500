@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "./AdminLayout.css";
 
 const AdminLayout = ({ children }) => {
@@ -7,6 +8,51 @@ const AdminLayout = ({ children }) => {
   const [isProductManagementOpen, setIsProductManagementOpen] = useState(false);
   const [isOrderManagementOpen, setIsOrderManagementOpen] = useState(false);
   const [isFeedbackAndStatsOpen, setIsFeedbackAndStatsOpen] = useState(false);
+  const [isRequestManagementOpen, setRequestManagementOpen] = useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // Preserve menu state based on the path
+    const path = location.pathname;
+    if (path.includes("/adminhome/table")) {
+      setIsTableManagementOpen(true);
+    } else if (
+      path.includes("/adminhome/category") ||
+      path.includes("/product-options") ||
+      path.includes("/create-product") ||
+      path.includes("/all-products")
+    ) {
+      setIsProductManagementOpen(true);
+    } else if (path.includes("/all-orders")) {
+      setIsOrderManagementOpen(true);
+    } else if (
+      path.includes("/revenue-stats") ||
+      path.includes("/product-stats") ||
+      path.includes("/customer-stats")
+    ) {
+      setIsFeedbackAndStatsOpen(true);
+    } else if (path === "/adminhome") {
+      setRequestManagementOpen(true);
+    }
+
+    // Optional: Close other menus when one is open to avoid multiple menus open simultaneously
+    return () => {
+      setIsTableManagementOpen(false);
+      setIsProductManagementOpen(false);
+      setIsOrderManagementOpen(false);
+      setIsFeedbackAndStatsOpen(false);
+      setRequestManagementOpen(false);
+    };
+  }, [location.pathname]);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const toggleRequestManagement = () => {
+    setRequestManagementOpen(!isRequestManagementOpen);
+  };
 
   const toggleProductManagement = () => {
     setIsProductManagementOpen(!isProductManagementOpen);
@@ -20,9 +66,6 @@ const AdminLayout = ({ children }) => {
     setIsFeedbackAndStatsOpen(!isFeedbackAndStatsOpen);
   };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
   const toggleTableManagement = () => {
     setIsTableManagementOpen(!isTableManagementOpen);
   };
@@ -45,6 +88,22 @@ const AdminLayout = ({ children }) => {
       <div className="admin-body">
         <nav className={`admin-sidebar ${isSidebarOpen ? "open" : "closed"}`}>
           <ul>
+            {/* Quản lý yêu cầu */}
+            <li
+              className="sidebar-section-title"
+              onClick={toggleRequestManagement}
+            >
+              <span>Quản lý yêu cầu</span>
+            </li>
+            {isRequestManagementOpen && (
+              <ul className="sidebar-submenu">
+                <li>
+                  <a href="/adminhome">Gọi nhân viên</a>
+                </li>
+              </ul>
+            )}
+
+            {/* Quản lý bàn */}
             <li
               className="sidebar-section-title"
               onClick={toggleTableManagement}
@@ -93,7 +152,7 @@ const AdminLayout = ({ children }) => {
             {isOrderManagementOpen && (
               <ul className="sidebar-submenu">
                 <li>
-                  <a href="/all-orders">Toàn bộ đơn hàng</a>
+                  <a href="/adminhome/order">Toàn bộ đơn hàng</a>
                 </li>
               </ul>
             )}

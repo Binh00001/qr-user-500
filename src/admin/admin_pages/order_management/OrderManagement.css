@@ -1,0 +1,142 @@
+.order-management-container {
+  width: 100%;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-management-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.order-management-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.order-filter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.order-filter span {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.order-filter input{
+  padding: 4px;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-table th,
+.order-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.order-table thead th {
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+.order-total {
+  font-weight: bold;
+}
+
+.confirm-button {
+  padding: 5px 10px;
+  background-color: orange;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.confirm-button:hover {
+  background-color: darkorange;
+}
+
+.cancel-button {
+  padding: 5px 10px;
+  background-color: gray;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: darkgray;
+}
+
+.complete-button {
+  padding: 5px 10px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.complete-button:hover {
+  background-color: darkgreen;
+}
+
+.status-completed {
+  color: green;
+  font-weight: bold;
+}
+
+.status-canceled {
+  color: red;
+  font-weight: bold;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  padding: 8px 12px;
+  margin: 0 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f7f7f7;
+}
+
+.pagination-button.active {
+  background-color: #333;
+  color: white;
+}
+
+.pagination-button:hover {
+  background-color: #ddd;
+}
+
+.phone-search-input {
+  padding: 8px;
+  font-size: 1.5rem;
+ 
+  border-radius: 8px;
+}
