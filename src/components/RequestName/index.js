@@ -3,26 +3,33 @@ import classNames from "classnames/bind";
 import styles from "./RequestName.scss";
 import clearIcon from "../../assets/image/Icon/close grey.png";
 import helloText from "../../assets/image/Icon/hello.png";
+
 const cx = classNames.bind(styles);
 
-function RequestName({ callback }) {
-  const [userName, setUserName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+function RequestName({
+  callback,
+  initialUserName = "",
+  initialPhoneNumber = "",
+}) {
+  const [userName, setUserName] = useState(initialUserName);
+  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber);
   const [isReady, setIsReady] = useState(false);
   const [phoneError, setPhoneError] = useState("");
 
+  useEffect(() => {
+    // Set initial values from props or localStorage
+    if (initialUserName) setUserName(initialUserName);
+    if (initialPhoneNumber) setPhoneNumber(initialPhoneNumber);
+  }, [initialUserName, initialPhoneNumber]);
+
   const handleClearUserName = () => {
-    // Clear the userName from the component state
     setUserName("");
-    // Remove the userName from local storage
     localStorage.removeItem("cusName");
   };
 
   const handleClearPhoneNumber = () => {
-    // Clear the phoneNumber from the component state
     setPhoneNumber("");
     setPhoneError("");
-    // Remove the phoneNumber from local storage
     localStorage.removeItem("cusPhone");
   };
 
@@ -46,12 +53,11 @@ function RequestName({ callback }) {
   }, [userName, phoneNumber]);
 
   const handleSubmit = () => {
-    // Save the username and phone number to local storage
     if (isReady) {
       localStorage.setItem("cusName", userName);
       localStorage.setItem("cusPhone", phoneNumber);
       if (callback) {
-        callback();
+        callback(userName, phoneNumber);
       }
     }
   };

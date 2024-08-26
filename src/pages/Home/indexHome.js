@@ -18,7 +18,9 @@ import comment from "../../assets/image/Icon/comment.png";
 import person from "../../assets/image/Icon/user.png";
 import food from "../../assets/image/Icon/fast-food.png";
 import location from "../../assets/image/Icon/maps-and-flags.png";
+
 const cx = classNames.bind(styles);
+
 function HomePage() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -30,7 +32,6 @@ function HomePage() {
 
   const options = {
     delay: 2000,
-    // jump: true,
   };
 
   useEffect(() => {
@@ -48,8 +49,12 @@ function HomePage() {
     }
   }, [showRequestName]);
 
-  const handleNameSubmitted = () => {
-    // Additional actions after name submission, like navigating to another page
+  const handleNameSubmitted = (newName, newPhone) => {
+    // Save the updated name and phone to local storage
+    localStorage.setItem("cusName", newName);
+    localStorage.setItem("cusPhone", newPhone);
+    setName(newName);
+    setPhone(newPhone);
     setShowRequestName(false);
   };
 
@@ -65,16 +70,20 @@ function HomePage() {
 
   return (
     <div className={cx("page_home_restaurant")}>
-      {showRequestName && <RequestName callback={handleNameSubmitted} />}
+      {showRequestName && (
+        <RequestName
+          initialUserName={name}
+          initialPhoneNumber={phone}
+          callback={handleNameSubmitted}
+        />
+      )}
       {showCallStaffDialog && (
         <Fragment>
           <div
             className={cx("overlay")}
             onClick={handleCloseCallStaffDialog}
           ></div>
-          <CallStaffDialog
-            callback={handleCloseCallStaffDialog}
-          ></CallStaffDialog>
+          <CallStaffDialog callback={handleCloseCallStaffDialog} />
         </Fragment>
       )}
       {showFeedbackDialog && (
@@ -83,7 +92,7 @@ function HomePage() {
             className={cx("overlay")}
             onClick={handelCloseFeedbackDialog}
           ></div>
-          <FeedbackDialog callback={handelCloseFeedbackDialog}></FeedbackDialog>
+          <FeedbackDialog callback={handelCloseFeedbackDialog} />
         </Fragment>
       )}
       <div className={cx("page--content")}>
@@ -112,14 +121,19 @@ function HomePage() {
           </div>
           <div className={cx("flag-1-1")}>
             <div className={cx("user-info")}>
-              <div className={cx("hello")}>Chào buổi chiều </div>
-              <div className={cx("name")}>{name}</div>
+              <div className={cx("hello")}>Chào buổi chiều</div>
+              <div
+                className={cx("name")}
+                onClick={() => setShowRequestName(true)}
+              >
+                {name}
+              </div>
             </div>
             <div className={cx("table-info")}>
               <div className={cx("text")}>
                 Chúng tôi sẽ trả đồ cho bạn tại bàn:{" "}
               </div>
-              <div className={cx("table")}>{}2B</div>
+              <div className={cx("table")}>2B</div>
             </div>
           </div>
           <div className={cx("interaction--container")}>
