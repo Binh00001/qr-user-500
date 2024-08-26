@@ -131,7 +131,7 @@ const AdminLayout = ({ children }) => {
                   <a href="/adminhome/category">Danh mục</a>
                 </li>
                 <li>
-                  <a href="/product-options">Tuỳ chọn</a>
+                  <a href="/adminhome/option">Tuỳ chọn</a>
                 </li>
                 <li>
                   <a href="/create-product">Tạo sản phẩm</a>

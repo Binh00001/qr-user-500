@@ -12,6 +12,7 @@ import AdminHomePage from "../admin/admin_pages/home/AdminHome.js";
 import Category from "../admin/admin_pages/category/index.js";
 import TableManagement from "../admin/admin_pages/table_management/index.js";
 import OrderManagement from "../admin/admin_pages/order_management/order_management.js";
+import OptionCategory from "../admin/admin_pages/option_category/option_category.js";
 const AppRoutes = () => {
   return (
     <Router>
@@ -54,6 +55,15 @@ const AppRoutes = () => {
           element={
             <RequireAuth fallbackPath="/adminlogin">
               <OrderManagement />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/adminhome/option"
+          element={
+            <RequireAuth fallbackPath="/adminlogin">
+              <OptionCategory />
             </RequireAuth>
           }
         />
