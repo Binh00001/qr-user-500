@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./category.css";
 import AdminLayout from "../../admin_layout/adminLayout";
 import axios from "axios";
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import ConfirmDialog from "../../admin_components/confirm_dialog";
 function Category() {
   const [categoryName, setCategoryName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -9,8 +11,14 @@ function Category() {
   const [editCategoryName, setEditCategoryName] = useState("");
   const [editCategoryId, setEditCategoryId] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const authHeader = useAuthHeader();
+  const [reload, setReload] = useState(false);
+
+  const config = {
+    headers: { Authorization: authHeader },
+  };
 
   useEffect(() => {
     // Define the async function to fetch data
@@ -19,19 +27,16 @@ function Category() {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/v1/category/all`
         );
-        console.log(response.data.listCategories);
         if (response.data.status === 200) {
           setCategories(response.data.listCategories); // Assuming response.data contains the categories
-          setLoading(false);
         }
       } catch (err) {
-        setError(err);
-        setLoading(false);
+        console.log(err);
       }
     };
 
     fetchCategories(); // Call the function to fetch data
-  }, []);
+  }, [reload]);
 
   const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -47,11 +52,55 @@ function Category() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (isEditing) {
-      // Xử lý lưu thông tin danh mục khi chỉnh sửa
-      console.log("Updated Category:", editCategoryId, editCategoryName);
+      // Handling updating category
+      const url = `${process.env.REACT_APP_API_URL}/v1/category/${editCategoryId}`;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authHeader,
+        },
+      };
+      const data = { name: editCategoryName };
+
+      axios
+        .put(url, data, config)
+        .then((response) => {
+          if (response.status === 200) {
+            alert(`Tên danh mục được đổi thành ${editCategoryName}`);
+            setReload(!reload);
+          } else {
+            alert("Xảy ra lỗi khi đổi tên danh mục");
+          }
+        })
+        .catch((error) => {
+          alert("Xảy ra lỗi khi đổi tên danh mục");
+          console.error("Error updating category:", error);
+        });
     } else {
-      // Xử lý thêm danh mục mới
-      console.log("Category Name:", categoryName);
+      // Handling creating a new category
+      const url = `${process.env.REACT_APP_API_URL}/v1/category`;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authHeader,
+        },
+      };
+      const data = { name: categoryName };
+
+      axios
+        .post(url, data, config)
+        .then((response) => {
+          if (response.status === 200) {
+            alert(`Tạo danh mục ${categoryName} thành công!`);
+            setReload(!reload);
+          } else {
+            alert("Xảy ra lỗi khi tạo danh mục! Có thể danh mục đã tồn tại");
+          }
+        })
+        .catch((error) => {
+          alert("Xảy ra lỗi khi tạo danh mục! Có thể danh mục đã tồn tại");
+          console.error("Error creating category:", error);
+        });
     }
     handleReset();
   };
@@ -62,8 +111,59 @@ function Category() {
     setEditCategoryId(category.id);
   };
 
+  const handleDeleteCategory = (category) => {
+    const url = `${process.env.REACT_APP_API_URL}/v1/category/${category.id}`;
+    const config = {
+      headers: {
+        Authorization: authHeader,
+      },
+    };
+
+    axios
+      .delete(url, config)
+      .then((response) => {
+        if (response.status === 200) {
+          alert(`Xoá danh mục ${category.name} thành công.`);
+          setReload(!reload);
+        } else {
+          alert("Xảy ra lỗi khi xoá danh mục");
+        }
+      })
+      .catch((error) => {
+        alert("Xảy ra lỗi khi xoá danh mục");
+        console.error("Error deleting category:", error);
+      });
+  };
+
+  const confirmDeleteCategory = (category) => {
+    setCategoryToDelete(category);
+    setConfirmDelete(true);
+  };
+
+  const handleCancel = () => {
+    setConfirmDelete(false);
+    setCategoryToDelete(null);
+  };
+
+  const handleConfirm = () => {
+    if (categoryToDelete) {
+      handleDeleteCategory(categoryToDelete);
+    }
+    handleCancel(); // Close dialog after confirming deletion
+  };
+
   return (
     <AdminLayout>
+      {confirmDelete && (
+        <ConfirmDialog
+          onCancel={handleCancel}
+          onConfirm={handleConfirm}
+          onClose={handleCancel}
+        >
+          Nếu xoá bỏ danh mục <strong>{categoryToDelete.name}</strong> thì các
+          sản phẩm thuộc danh mục này cũng sẽ bị xoá. Bạn muốn tiếp tục?
+        </ConfirmDialog>
+      )}
       {!isEditing ? (
         <div className="create-category-container">
           <h1 className="create-category-title">Tạo danh mục mới</h1>
@@ -159,7 +259,12 @@ function Category() {
                   </button>
                 </td>
                 <td>
-                  <button className="delete-button">Xoá</button>
+                  <button
+                    className="delete-button"
+                    onClick={() => confirmDeleteCategory(category)}
+                  >
+                    Xoá
+                  </button>
                 </td>
               </tr>
             ))}

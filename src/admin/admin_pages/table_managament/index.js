@@ -126,8 +126,12 @@ function TableManagement() {
     axios
       .delete(url, config)
       .then((response) => {
-        alert(`Xoá bàn ${table.name} thành công.`);
-        setReload(!reload);
+        if (response.status === 204) {
+          alert(`Xoá bàn ${table.name} thành công.`);
+          setReload(!reload);
+        } else {
+          alert("Xảy ra lỗi khi xoá bàn");
+        }
       })
       .catch((error) => {
         alert("Xảy ra lỗi khi xoá bàn");
