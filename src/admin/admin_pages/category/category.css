@@ -37,7 +37,7 @@
   .form-group input[type="file"] {
     width: 100%;
     padding: 10px;
-    font-size: 1rem;
+    font-size: 1.5rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-sizing: border-box;
@@ -108,7 +108,7 @@
   
   .category-search input {
     padding: 8px 12px;
-    font-size: 1rem;
+    font-size: 1.5rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-right: 10px;
