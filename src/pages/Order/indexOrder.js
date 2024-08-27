@@ -111,14 +111,22 @@ function Order() {
       const orderData = {
         table_id: tableId,
         phone_number: localStorage.getItem("cusPhone") || "", // Assuming the phone number is stored in localStorage
-        dishes: cartItems.map((item) => ({
-          dish_id: item.id,
-          quantity: item.cartQuantity,
-          option_id: item.option_id || null, // Ensure option_id is sent as null if empty
-          note: item.note || "", // Default to an empty string if note is not provided
-        })),
+        dishes: cartItems.map((item) => {
+          // Construct dish object
+          const dish = {
+            dish_id: item.id,
+            quantity: item.cartQuantity,
+            note: item.note || "", // Default to an empty string if note is not provided
+          };
+
+          // Only add option_id if it exists
+          if (item.option_id) {
+            dish.option_id = item.option_id;
+          }
+
+          return dish;
+        }),
       };
-      console.log(orderData);
 
       // Make a POST request to the order endpoint
       const response = await axios.post(
@@ -134,12 +142,18 @@ function Order() {
 
       // Handle the response as needed
       if (response.status === 200) {
+        clearCart();
+        navigate("/qrview", {
+          state: { qrUrl: response.data.ListOrder.qr_url },
+        });
         console.log("Order created successfully:", response.data);
         // Perform any other actions, e.g., updating UI or notifying the user
       } else {
+        alert("Xảy ra lỗi khi tạo đơn.");
         console.error("Failed to create order:", response.data);
       }
     } catch (error) {
+      alert("Xảy ra lỗi không xác định.");
       console.error("Error sending order:", error);
       // Handle error, e.g., showing an error message to the user
     }
