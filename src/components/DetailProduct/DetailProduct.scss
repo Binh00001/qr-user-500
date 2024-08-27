@@ -58,6 +58,22 @@
     flex-direction: column;
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
+    .options-list {
+      padding: 12px 4px 0 4px;
+      .option-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 12px;
+        .option-name {
+          text-transform: capitalize;
+        }
+      }
+      .selected {
+        background-color: #ed9455;
+        color: #e6e6e6;
+        border-radius: 4px;
+      }
+    }
     .note-container {
       background-color: #e6e6e6;
       border-radius: 4px;

@@ -16,8 +16,6 @@ import rightArrow from "../../assets/image/Icon/right-arrow.png";
 const cx = classNames.bind(styles);
 function Menu() {
   const navigate = useNavigate();
-  const testToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6Imh1eSIsInBob25lbnVtYmVyIjoiOTk5OTk5OSIsImVtYWlsIjoibmd1eWVucXVhbmdodXltdDFAZ21haWwuY29tIiwiYWdlIjoyMCwiYWRkcmVzcyI6Ik5hbSDEkOG7i25oIiwicGFzc3dvcmQiOiIkMmIkMDgkN243SDRyR1RoeEtyQnpHZlNRTUJIdVpTemNIaXg3dVhrVW1mem95RGJrRFhYMnlCaC4wUnEiLCJjcmVhdGVkQXQiOiIyMDI0LTA4LTA0VDA3OjAyOjEwLjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTA4LTA0VDA3OjAyOjEwLjAwMFoiLCJpYXQiOjE3MjI4ODAwMzUsImV4cCI6MTcyMzEzOTIzNX0.htOR7x6r8Va2fm2XR1oGIAiV-CU46AqkUX-pYKZL3fk";
   const token = localStorage.getItem("token") || "";
   const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -41,12 +39,13 @@ function Menu() {
 
   // Khởi tạo trạng thái cho biến theo dõi category
   const [currentCategoryId, setCurrentCategoryId] = useState(0);
-
+  const [options, setOptions] = useState([]);
   // Khởi tạo các biến dùng cho detail product
   const [showDetailProduct, setShowDetailProduct] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   //get all category list
+
   // Fetch category list
   useEffect(() => {
     axios
@@ -63,6 +62,26 @@ function Menu() {
         console.log(error);
       });
   }, []);
+
+  //fetch option list
+  useEffect(() => {
+    // Fetch options whenever the selected category changes
+    const fetchOptions = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/v1/option?category_id=${currentCategoryId}`
+        );
+        if (response.data.status === 200) {
+          setOptions(response.data.data);
+          // setOptions(response.data.options); // Assuming the response has an options array
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchOptions();
+  }, [currentCategoryId]);
 
   // Fetch initial dish list
   useEffect(() => {
@@ -159,28 +178,36 @@ function Menu() {
     setCurrentCategoryId(category.id);
   };
 
-  function addToCartLocalWithNote(product, quantity, note) {
+  function addToCartLocalWithNote(product, quantity, note, selectedOption) {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existingItemIndex = cart.findIndex((x) => x.id === product.id);
+    const existingItemIndex = cart.findIndex(
+      (x) => x.id === product.id && x.option_id === selectedOption.id
+    );
 
     if (existingItemIndex !== -1) {
-      // Nếu sản phẩm đã có trong giỏ, cập nhật thông tin mới
+      // If the product with the same option is already in the cart, update its information
       cart[existingItemIndex].cartQuantity = quantity;
       cart[existingItemIndex].note = note;
+      cart[existingItemIndex].option_id = selectedOption.id;
+      cart[existingItemIndex].option_name = selectedOption.name;
+      cart[existingItemIndex].option_price = selectedOption.price;
     } else {
-      // Nếu sản phẩm chưa có trong giỏ, thêm mới
+      // If the product with the same option is not in the cart, add it as a new item
       const newItem = {
         ...product,
         cartQuantity: quantity,
         note: note,
+        option_id: selectedOption.id,
+        option_name: selectedOption.name,
+        option_price: selectedOption.price,
       };
       cart.push(newItem);
     }
 
-    // Lưu giỏ hàng trở lại vào Local Storage
+    // Save the updated cart back to Local Storage
     localStorage.setItem("cart", JSON.stringify(cart));
-    handleCloseDetail();
-    setReloadCart(!reloadCart); // Giả sử bạn đã định nghĩa state này ở đâu đó để re-render
+    handleCloseDetail(); // Close the detail view or dialog
+    setReloadCart((prevReloadCart) => !prevReloadCart); // Toggle state to trigger re-render
   }
 
   function addToLocalCart(item, type) {
@@ -247,6 +274,7 @@ function Menu() {
             textConfirm={"Thêm vào giỏ"}
             closeFunction={handleCloseDetail}
             confirmFunction={addToCartLocalWithNote}
+            options={options}
           ></DetailProduct>
         </Fragment>
       )}

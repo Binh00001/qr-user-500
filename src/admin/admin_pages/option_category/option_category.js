@@ -39,10 +39,6 @@ function OptionCategory() {
   useEffect(() => {
     // Fetch options whenever the selected category changes
     const fetchOptions = async () => {
-      console.log(
-        `${process.env.REACT_APP_API_URL}/v1/option?category_id=${selectedCategory}`
-      );
-
       if (!selectedCategory) return;
       try {
         const response = await axios.get(

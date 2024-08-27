@@ -14,18 +14,31 @@ function DetailProduct({
   confirmFunction,
   currentNote,
   currentQuantity,
+  options, // New prop for options
 }) {
   const [quantity, setQuantity] = useState(
     currentQuantity ? currentQuantity : 1
-  ); // Biến trạng thái để giữ số lượng
-  const [note, setNote] = useState(currentNote ? currentNote : ""); // Biến trạng thái để giữ ghi chú
+  );
+  const [note, setNote] = useState(currentNote ? currentNote : "");
+  const [selectedOption, setSelectedOption] = useState({
+    id: "",
+    name: "",
+    price: 0,
+  }); // New state for selected option
 
-  // Hàm tăng số lượng sản phẩm
+  useEffect(() => {
+    if (options && options.length > 0) {
+      const option = options.find((option) => option.id === product.option_id);
+      if (option) {
+        setSelectedOption(option);
+      }
+    }
+  }, [options]);
+
   const incrementQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
-  // Hàm giảm số lượng sản phẩm
   const decrementQuantity = () => {
     setQuantity((prevQuantity) => Math.max(1, prevQuantity - 1));
   };
@@ -36,49 +49,87 @@ function DetailProduct({
         <img src={product.image} alt="PRODUCT-IMAGE" />
       </div>
       <div className={cx("return-button-container")} onClick={closeFunction}>
-        <img src={returnIcon} alt="RETURN"></img>
+        <img src={returnIcon} alt="RETURN" />
       </div>
       <div className={cx("detail-container")}>
         <div className={cx("detail-name")}>{product.name}</div>
         <div className={cx("detail-description")}>{product.description}</div>
       </div>
       <div className={cx("option-container")}>
-        <div className={cx("note-container")}>
-          <img src={noteIcon} alt="NOTE"></img>
-          <textarea
-            placeholder="Ghi chú cho món ăn"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          ></textarea>
-        </div>
-        <div className={cx("bottom-bar")}>
-          <div className={cx("action-with-product")}>
-            <div className={cx("minus-container")} onClick={decrementQuantity}>
-              <img src={minusIcon} alt="MINUS"></img>
-            </div>
-            <div className={cx("input-quantity")}>
-              <input
-                type="tel"
-                maxLength={4}
-                value={quantity}
-                onChange={(e) =>
-                  setQuantity(Math.max(1, parseInt(e.target.value) || 1))
+        {/* Display Options */}
+        {options && options.length > 0 && (
+          <div className={cx("options-list")}>
+            {options.map((option) => (
+              <div
+                key={option.id}
+                className={cx("option-item", {
+                  selected: selectedOption.id === option.id,
+                })}
+                onClick={
+                  () =>
+                    selectedOption.id === option.id
+                      ? setSelectedOption({ id: "", name: "", price: 0 }) // Deselect if already selected
+                      : setSelectedOption(option) // Select if not already selected
                 }
-              />
-            </div>
-            <div className={cx("plus-container")} onClick={incrementQuantity}>
-              <img src={plusIcon} alt="PLUS"></img>
-            </div>
+              >
+                <div className={cx("option-name")}>{option.name}</div>
+                <div className={cx("option-price")}>
+                  {option.price.toLocaleString("vi-VN")} đ
+                </div>
+              </div>
+            ))}
           </div>
-          <div
-            className={cx("add-to-cart-button")}
-            onClick={() => confirmFunction(product, quantity, note)}
-          >
-            <div className={cx("add-to-cart-title")}>
-              {textConfirm} ({quantity})
+        )}
+        <div></div>
+
+        {/* Note Input and Bottom Bar */}
+        <div className={cx("note-and-bottom-bar")}>
+          <div className={cx("note-container")}>
+            <img src={noteIcon} alt="NOTE" />
+            <textarea
+              placeholder="Ghi chú cho món ăn"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            ></textarea>
+          </div>
+
+          <div className={cx("bottom-bar")}>
+            <div className={cx("action-with-product")}>
+              <div
+                className={cx("minus-container")}
+                onClick={decrementQuantity}
+              >
+                <img src={minusIcon} alt="MINUS" />
+              </div>
+              <div className={cx("input-quantity")}>
+                <input
+                  type="tel"
+                  maxLength={4}
+                  value={quantity}
+                  onChange={(e) =>
+                    setQuantity(Math.max(1, parseInt(e.target.value) || 1))
+                  }
+                />
+              </div>
+              <div className={cx("plus-container")} onClick={incrementQuantity}>
+                <img src={plusIcon} alt="PLUS" />
+              </div>
             </div>
-            <div className={cx("add-to-cart-price")}>
-              {(product.price * quantity).toLocaleString("vi-VN")}
+            <div
+              className={cx("add-to-cart-button")}
+              onClick={() =>
+                confirmFunction(product, quantity, note, selectedOption)
+              }
+            >
+              <div className={cx("add-to-cart-title")}>
+                {textConfirm} ({quantity})
+              </div>
+              <div className={cx("add-to-cart-price")}>
+                {(
+                  (product.price + selectedOption.price) *
+                  quantity
+                ).toLocaleString("vi-VN")}
+              </div>
             </div>
           </div>
         </div>

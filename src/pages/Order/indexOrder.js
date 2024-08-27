@@ -13,7 +13,7 @@ function Order() {
   // Khởi tạo các biến dùng cho detail product
   const [showDetailProduct, setShowDetailProduct] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-
+  const [options, setOptions] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [reloadCart, setReloadCart] = useState(false);
@@ -27,6 +27,31 @@ function Order() {
     );
     setTotalPrice(total);
   }, [reloadCart]);
+
+  //fetch option list
+  useEffect(() => {
+    console.log(selectedProduct);
+
+    // Fetch options whenever the selected category changes
+    if (selectedProduct == null) {
+      return;
+    }
+    const fetchOptions = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/v1/option?category_id=${selectedProduct.category_id}`
+        );
+        if (response.data.status === 200) {
+          setOptions(response.data.data);
+          // setOptions(response.data.options); // Assuming the response has an options array
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchOptions();
+  }, [selectedProduct]);
 
   const removeItem = (index) => {
     const newCart = [...cartItems];
@@ -57,28 +82,25 @@ function Order() {
     e.stopPropagation(); // Ngăn sự kiện nổi bọt để không kích hoạt hàm handleOpenDetail khi nhấn vào các nút trong 'action-with-item-in-cart'
   };
 
-  function addToCartLocalWithNote(product, quantity, note) {
+  function addToCartLocalWithNote(product, quantity, note, selectedOption) {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingItemIndex = cart.findIndex((x) => x.id === product.id);
 
     if (existingItemIndex !== -1) {
-      // Nếu sản phẩm đã có trong giỏ, cập nhật thông tin mới
+      // If the product with the same option is already in the cart, update its information
       cart[existingItemIndex].cartQuantity = quantity;
       cart[existingItemIndex].note = note;
-    } else {
-      // Nếu sản phẩm chưa có trong giỏ, thêm mới
-      const newItem = {
-        ...product,
-        cartQuantity: quantity,
-        note: note,
-      };
-      cart.push(newItem);
+      cart[existingItemIndex].option_id = selectedOption.id;
+      cart[existingItemIndex].option_name = selectedOption.name;
+      cart[existingItemIndex].option_price = selectedOption.price;
     }
 
-    // Lưu giỏ hàng trở lại vào Local Storage
+    // Save the updated cart back to Local Storage
     localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Call any functions to close details or refresh the cart display as needed
     handleCloseDetail();
-    setReloadCart(!reloadCart); // Giả sử bạn đã định nghĩa state này ở đâu đó để re-render
+    setReloadCart((prev) => !prev); // Assuming state to re-render is managed elsewhere
   }
 
   return (
@@ -96,6 +118,7 @@ function Order() {
             confirmFunction={addToCartLocalWithNote}
             currentNote={selectedProduct.note}
             currentQuantity={selectedProduct.cartQuantity}
+            options={options}
           ></DetailProduct>
         </Fragment>
       )}
@@ -116,10 +139,15 @@ function Order() {
             <div className={cx("detail-container")}>
               <div className={cx("quantity-and-name")}>
                 <div className={cx("quantity")}>{`${item.cartQuantity} x`}</div>
+
                 <div className={cx("name")}>{item.name}</div>
               </div>
+              <div className="option-name">{item.option_name}</div>
               <div className={cx("price")}>
-                {(item.price * item.cartQuantity).toLocaleString("vi-VN", {
+                {(
+                  item.cartQuantity *
+                  (item.option_price + item.price)
+                ).toLocaleString("vi-VN", {
                   currency: "VND",
                 })}
               </div>
