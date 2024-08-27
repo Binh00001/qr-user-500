@@ -1,5 +1,5 @@
 .qr-view-container {
-  min-height: 100vh;
+  // min-height: 100vh;
 
   .qr-view-header {
     display: flex;
@@ -32,22 +32,49 @@
   }
 
   .qr-view-content {
-    margin-top: 55px; /* Ensure content starts below the fixed header */
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    margin-top: 60px; // Adjust if needed based on the header height
+  }
 
-    .qr-code-image {
-      max-width: 90%;
-      height: auto;
-      margin: 0 auto;
-      display: block;
+  .qr-code-image {
+    max-width: 90%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .qr-view-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+
+    .copy-account-button,
+    .save-qr-button {
+      width: 90%; // Buttons will take up 90% of the container width
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .copy-account-button {
+      background-color: #dddddd;
+      color: black;
+    }
+
+    .save-qr-button {
+      background-color: #ff9800;
+      color: white;
     }
   }
 
   .qr-view-footer {
-    height: 115px;
-    /* You can add any additional styles for the footer here */
+    height: 115px; // Adjust if needed
   }
 }

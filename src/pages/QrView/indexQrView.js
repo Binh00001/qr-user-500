@@ -20,6 +20,22 @@ function QrView() {
     }
   }, [location.state]);
 
+  const handleCopyAccountNumber = () => {
+    // Replace '123456789' with the actual account number you want to copy
+    navigator.clipboard.writeText("123456789");
+    alert("Số tài khoản đã được sao chép!");
+  };
+
+  const handleSaveQrCode = () => {
+    if (qrUrl) {
+      // Create a link element, set its href to the QR code URL, and trigger a click to download
+      const link = document.createElement("a");
+      link.href = qrUrl;
+      link.download = "qr-code.png"; // Set the default filename
+      link.click();
+    }
+  };
+
   return (
     <div className={cx("qr-view-container")}>
       <div className={cx("qr-view-header")}>
@@ -38,7 +54,21 @@ function QrView() {
           <img src={qrUrl} alt="QR Code" className={cx("qr-code-image")} />
         )}
       </div>
-      <div className={cx("qr-view-footer")}></div>
+      {qrUrl && (
+        <div className={cx("qr-view-buttons")}>
+          <button
+            className={cx("copy-account-button")}
+            onClick={handleCopyAccountNumber}
+          >
+            Sao chép số tài khoản
+          </button>
+          <button className={cx("save-qr-button")} onClick={handleSaveQrCode}>
+            Lưu mã QR
+          </button>
+        </div>
+      )}
+
+      {/* <div className={cx("qr-view-footer")}></div> */}
     </div>
   );
 }
