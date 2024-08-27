@@ -1,0 +1,53 @@
+.qr-view-container {
+  min-height: 100vh;
+
+  .qr-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dddddd;
+    padding: 12px;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 20;
+    background-color: #fff;
+
+    .qr-view-back-button {
+      display: flex;
+      align-items: center;
+      border-radius: 8px;
+      padding: 6px;
+      border: 1px solid #dddddd;
+
+      img {
+        height: 16px;
+      }
+    }
+
+    .qr-view-title {
+      font-size: 20px;
+      margin-right: 20px;
+    }
+  }
+
+  .qr-view-content {
+    margin-top: 55px; /* Ensure content starts below the fixed header */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    .qr-code-image {
+      max-width: 90%;
+      height: auto;
+      margin: 0 auto;
+      display: block;
+    }
+  }
+
+  .qr-view-footer {
+    height: 115px;
+    /* You can add any additional styles for the footer here */
+  }
+}
