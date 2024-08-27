@@ -121,7 +121,7 @@ function HomePage() {
           </div>
           <div className={cx("flag-1-1")}>
             <div className={cx("user-info")}>
-              <div className={cx("hello")}>Chào buổi chiều</div>
+              <div className={cx("hello")}>Xin chào </div>
               <div
                 className={cx("name")}
                 onClick={() => setShowRequestName(true)}

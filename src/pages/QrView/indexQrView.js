@@ -8,19 +8,15 @@ import close from "../../assets/image/Icon/close grey.png";
 import DetailProduct from "../../components/DetailProduct/index";
 const cx = classNames.bind(styles);
 
-function Bill() {
+function QrView() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token") || "";
   return (
     <div className={cx("page-bill-restaurant")}>
       <div className={cx("bill-top-bar")}>
-        <div
-          className={cx("bill-return")}
-          onClick={() => navigate(`/home/${token}`)}
-        >
+        <div className={cx("bill-return")} onClick={() => navigate("bill")}>
           <img src={leftArrow} alt="Back"></img>
         </div>
-        <div className={cx("bill-title")}>Lịch sử đơn hàng</div>
+        <div className={cx("bill-title")}>Mã thanh toán của bạn</div>
         <div></div>
       </div>
       <div className={cx("bill-header-area")}></div>
@@ -29,4 +25,4 @@ function Bill() {
   );
 }
 
-export default Bill;
+export default QrView;

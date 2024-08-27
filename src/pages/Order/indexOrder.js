@@ -17,12 +17,14 @@ function Order() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [reloadCart, setReloadCart] = useState(false);
+  const table_id = JSON.parse(localStorage.getItem("table_id")) || 1;
+
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem("cart")) || [];
     setCartItems(items);
     // Tính tổng giá tiền
     const total = items.reduce(
-      (sum, item) => sum + item.price * item.cartQuantity,
+      (sum, item) => sum + (item.price + item.option_price) * item.cartQuantity,
       0
     );
     setTotalPrice(total);
@@ -102,6 +104,46 @@ function Order() {
     handleCloseDetail();
     setReloadCart((prev) => !prev); // Assuming state to re-render is managed elsewhere
   }
+
+  const sendOrder = async (cartItems, tableId) => {
+    try {
+      // Prepare the order data from CartItems
+      const orderData = {
+        table_id: tableId,
+        phone_number: localStorage.getItem("cusPhone") || "", // Assuming the phone number is stored in localStorage
+        dishes: cartItems.map((item) => ({
+          dish_id: item.id,
+          quantity: item.cartQuantity,
+          option_id: item.option_id || null, // Ensure option_id is sent as null if empty
+          note: item.note || "", // Default to an empty string if note is not provided
+        })),
+      };
+      console.log(orderData);
+
+      // Make a POST request to the order endpoint
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/v1/order`,
+        orderData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      // Handle the response as needed
+      if (response.status === 200) {
+        console.log("Order created successfully:", response.data);
+        // Perform any other actions, e.g., updating UI or notifying the user
+      } else {
+        console.error("Failed to create order:", response.data);
+      }
+    } catch (error) {
+      console.error("Error sending order:", error);
+      // Handle error, e.g., showing an error message to the user
+    }
+  };
 
   return (
     <div className={cx("page-order-restaurant")}>
@@ -183,7 +225,12 @@ function Order() {
 
       <div className={cx("order-footer-area")}></div>
       <div className={cx("confirm-container")}>
-        <div className={cx("confirm-button")}>Gửi yêu cầu gọi món</div>
+        <div
+          className={cx("confirm-button")}
+          onClick={() => sendOrder(cartItems, table_id)}
+        >
+          Gửi yêu cầu gọi món
+        </div>
       </div>
     </div>
   );

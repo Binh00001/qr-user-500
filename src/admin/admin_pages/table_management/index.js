@@ -166,7 +166,6 @@ function TableManagement() {
 
       // Check if the response is successful
       if (response.status === 200) {
-        console.log("Table status updated successfully:", response.data);
         setReload(!reload);
         // Optionally update the UI or state here
         // For example: refreshTableList(); or updateTableStatusInState(table.uuid, newStatus);

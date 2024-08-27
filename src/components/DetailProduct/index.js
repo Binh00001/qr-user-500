@@ -59,7 +59,7 @@ function DetailProduct({
         {/* Display Options */}
         {options && options.length > 0 && (
           <div className={cx("options-list")}>
-            {options.map((option) => (
+            {options.map((option, index) => (
               <div
                 key={option.id}
                 className={cx("option-item", {
@@ -72,7 +72,9 @@ function DetailProduct({
                       : setSelectedOption(option) // Select if not already selected
                 }
               >
-                <div className={cx("option-name")}>{option.name}</div>
+                <div className={cx("option-name")}>
+                  {index + 1}. {option.name}
+                </div>
                 <div className={cx("option-price")}>
                   {option.price.toLocaleString("vi-VN")} đ
                 </div>
