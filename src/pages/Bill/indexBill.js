@@ -23,7 +23,6 @@ function Bill() {
         <div></div>
       </div>
       <div className={cx("bill-header-area")}></div>
-
       <div className={cx("bill-footer-area")}></div>
     </div>
   );
