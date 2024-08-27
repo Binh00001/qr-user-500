@@ -107,7 +107,14 @@ function Bill() {
               >
                 <div className={cx("order-info")}>
                   <p>
-                    <strong>STT:</strong> {index + 1}
+                    <strong>Thời gian tạo:</strong>{" "}
+                    {new Date(order.createdAt).toLocaleString("vi-VN", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      day: "2-digit",
+                      month: "2-digit",
+                      // year: "numeric",
+                    })}
                   </p>
                   <p>
                     <strong>Trạng thái:</strong> {order.status}
@@ -115,10 +122,6 @@ function Bill() {
                   <p>
                     <strong>Tổng tiền:</strong>{" "}
                     {order.total_price.toLocaleString("vi-VN")} đ
-                  </p>
-                  <p>
-                    <strong>Thời gian tạo:</strong>{" "}
-                    {new Date(order.createdAt).toLocaleString("vi-VN")}
                   </p>
                 </div>
               </li>
