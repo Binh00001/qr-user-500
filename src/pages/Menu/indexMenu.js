@@ -237,6 +237,9 @@ function Menu() {
         ...item,
         cartQuantity: 1, // Sử dụng cartQuantity từ đầu vào
         note: "", // Sử dụng note từ đầu vào
+        option_id: null,
+        option_name: "",
+        option_price: 0,
       };
       cart.push(newItem);
     }
