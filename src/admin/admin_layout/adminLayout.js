@@ -74,7 +74,7 @@ const AdminLayout = ({ children }) => {
       <header className="admin-header">
         <div className="admin-account-info">
           <div className="admin-account-details">
-            <p className="admin-name">John Doe</p>
+            <p className="admin-name">Admin</p>
             <p className="admin-role">Administrator</p>
           </div>
           <img

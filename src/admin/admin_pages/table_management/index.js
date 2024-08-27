@@ -26,6 +26,7 @@ function TableManagement() {
           const data = response.data;
           if (data && data.status === 200) {
             setTables(data.listTable);
+            console.log(data.listTable);
           }
         })
         .catch((error) => {
@@ -143,8 +144,38 @@ function TableManagement() {
     alert(`Copied UUID: ${uuid}`);
   };
 
-  const handleToggleActive = (table) => {
-    console.log("Toggled active state for Table ID:", table);
+  const handleToggleActive = async (table) => {
+    try {
+      // Toggle the current status of the table
+      const newStatus = table.status === "active" ? "unactive" : "active";
+
+      // Make the PATCH request to update the table status
+      const response = await axios.patch(
+        `${process.env.REACT_APP_API_URL}/v1/table`,
+        {
+          uuid: table.uuid, // Assuming the table object contains the uuid
+          status: newStatus,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authHeader, // Replace with your actual token
+          },
+        }
+      );
+
+      // Check if the response is successful
+      if (response.status === 200) {
+        console.log("Table status updated successfully:", response.data);
+        setReload(!reload);
+        // Optionally update the UI or state here
+        // For example: refreshTableList(); or updateTableStatusInState(table.uuid, newStatus);
+      } else {
+        console.error("Failed to update table status:", response.data);
+      }
+    } catch (error) {
+      console.error("Error toggling table status:", error);
+    }
   };
 
   const handleViewUuid = (id) => {
@@ -281,7 +312,7 @@ function TableManagement() {
                   <label className="switch">
                     <input
                       type="checkbox"
-                      checked={!table.active}
+                      checked={table.status === "active"}
                       onChange={() => handleToggleActive(table)}
                     />
                     <span className="slider round"></span>
