@@ -39,13 +39,18 @@ function OptionCategory() {
   useEffect(() => {
     // Fetch options whenever the selected category changes
     const fetchOptions = async () => {
+      console.log(
+        `${process.env.REACT_APP_API_URL}/v1/option?category_id=${selectedCategory}`
+      );
+
       if (!selectedCategory) return;
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/v1/option?categoryid=${selectedCategory}`
+          `${process.env.REACT_APP_API_URL}/v1/option?category_id=${selectedCategory}`
         );
         if (response.data.status === 200) {
-          setOptions(response.data.options); // Assuming the response has an options array
+          setOptions(response.data.data);
+          // setOptions(response.data.options); // Assuming the response has an options array
         }
       } catch (err) {
         console.log(err);
@@ -135,32 +140,34 @@ function OptionCategory() {
       return;
     }
 
-    try {
-      const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/v1/option/${editOptionId}`,
-        {
-          name: editOptionName,
-          price: editOptionPrice,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: authHeader, // Replace with your actual token
-          },
-        }
-      );
+    //pending chưa có api
 
-      if (response.data.status === 200) {
-        alert("Option updated successfully.");
-        handleReset(); // Reset the form after editing
-        setReload(!reload); // Trigger a reload to fetch updated options
-      } else {
-        alert("Failed to update option.");
-      }
-    } catch (err) {
-      console.log(err);
-      alert("An error occurred while updating the option.");
-    }
+    // try {
+    //   const response = await axios.put(
+    //     `${process.env.REACT_APP_API_URL}/v1/option/${editOptionId}`,
+    //     {
+    //       name: editOptionName,
+    //       price: editOptionPrice,
+    //     },
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: authHeader, // Replace with your actual token
+    //       },
+    //     }
+    //   );
+
+    //   if (response.data.status === 200) {
+    //     alert("Cập nhật tuỳ chọn thành công.");
+    //     handleReset(); // Reset the form after editing
+    //     setReload(!reload); // Trigger a reload to fetch updated options
+    //   } else {
+    //     alert("Failed to update option.");
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    //   alert("An error occurred while updating the option.");
+    // }
   };
   return (
     <AdminLayout>
