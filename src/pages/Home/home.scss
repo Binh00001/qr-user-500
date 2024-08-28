@@ -118,4 +118,19 @@
       font-weight: 500;
     }
   }
+  .chat-icon {
+    position: fixed;
+    bottom: 20px; // Distance from the bottom
+    right: 20px; // Distance from the right
+    z-index: 1000; // Ensure it stays on top of other content
+    cursor: pointer; // Optional: changes the cursor on hover
+    background-color: #b5c0d0;
+    border-radius: 16px;
+    img {
+      margin: 8px 8px 0 8px;
+      width: 50px; // Set the size of the chat icon
+      height: 50px;
+      transition: transform 0.3s ease; // Smooth transform effect on hover
+    }
+  }
 }

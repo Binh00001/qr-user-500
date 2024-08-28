@@ -18,6 +18,7 @@ import CreateProduct from "../admin/admin_pages/create_product/create_product.js
 import ListProduct from "../admin/admin_pages/list_product/list_product.js";
 import Evaluate from "../admin/admin_pages/evaluate/evaluate.js";
 import QrView from "../pages/QrView/indexQrView.js";
+import ChatBotPage from "../pages/ChatBot/indexChatBotPage.js";
 const AppRoutes = () => {
   return (
     <Router>
@@ -28,6 +29,7 @@ const AppRoutes = () => {
         <Route path="/bill" element={<Bill />} />
         <Route path="/adminlogin" element={<AdminLoginScreen />} />
         <Route path="/qrview" element={<QrView />} />
+        <Route path="/chatbot" element={<ChatBotPage />} />
         {/* Bảo vệ các đường dẫn quản trị sử dụng RequireAuth */}
         <Route
           path="/adminhome/*"

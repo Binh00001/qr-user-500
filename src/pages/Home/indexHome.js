@@ -18,7 +18,7 @@ import comment from "../../assets/image/Icon/comment.png";
 import person from "../../assets/image/Icon/user.png";
 import food from "../../assets/image/Icon/fast-food.png";
 import location from "../../assets/image/Icon/maps-and-flags.png";
-
+import chatbot from "../../assets/image/Icon/chatbot.png";
 const cx = classNames.bind(styles);
 
 function HomePage() {
@@ -170,6 +170,9 @@ function HomePage() {
             <div className={cx("text-description-menu")}>
               Xem Menu - Gọi món
             </div>
+          </div>
+          <div className={cx("chat-icon")} onClick={() => navigate("/chatbot")}>
+            <img src={chatbot} alt="Chat with AI" />
           </div>
         </Fragment>
       </div>
