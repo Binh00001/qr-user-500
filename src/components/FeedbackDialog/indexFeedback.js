@@ -102,7 +102,7 @@ function FeedbackDialog({ callback }) {
       <div className={cx("virtual-hr")}></div>
       <div className={cx("ask-for-phone")}>
         Nhà hàng rất trân trọng và mong muốn phản hồi lại đánh giá trên, bạn vui
-        lòng để lại số điện thoại nhé :
+        lòng để lại số điện thoại nhé:
       </div>
       <div className={cx("fb-bottom-container")}>
         <div className={cx("phone-input-container")}>

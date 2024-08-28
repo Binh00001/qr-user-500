@@ -92,11 +92,15 @@ function Bill() {
       <div className={cx("bill-header-area")}></div>
       <div className={cx("bill-content-area")}>
         {loading ? (
-          <p>Đang tải...</p>
+          <div className={cx("bill-empty-container")}>
+            <p>Đang tải...</p>
+          </div>
         ) : error ? (
           <p>{error}</p>
         ) : orderHistory.length === 0 ? (
-          <p>Không có đơn hàng nào trong khoảng thời gian này.</p>
+          <div className={cx("bill-empty-container")}>
+            <p>Không có đơn hàng</p>
+          </div>
         ) : (
           <ul className={cx("order-history-list")}>
             {orderHistory.map((order, index) => (
