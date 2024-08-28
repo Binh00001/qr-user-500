@@ -25,6 +25,7 @@ function HomePage() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [tableId, setTableId] = useState(null);
   const { token } = useParams();
   const [showRequestName, setShowRequestName] = useState(false);
   const [showCallStaffDialog, setShowCallStaffDialog] = useState(false);
@@ -83,7 +84,10 @@ function HomePage() {
             className={cx("overlay")}
             onClick={handleCloseCallStaffDialog}
           ></div>
-          <CallStaffDialog callback={handleCloseCallStaffDialog} />
+          <CallStaffDialog
+            callback={handleCloseCallStaffDialog}
+            tableId={tableId ?? 1}
+          />
         </Fragment>
       )}
       {showFeedbackDialog && (

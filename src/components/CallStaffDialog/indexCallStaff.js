@@ -3,9 +3,10 @@ import styles from "./callstaff.scss";
 import closeIcon from "../../assets/image/Icon/close-black.png";
 import noteIcon from "../../assets/image/Icon/notes.png";
 import classNames from "classnames";
+import axios from "axios";
 const cx = classNames.bind(styles);
 
-const CallStaffDialog = ({ callback }) => {
+const CallStaffDialog = ({ callback, tableId }) => {
   const [note, setNote] = useState("");
   const [selectedActions, setSelectedActions] = useState([]);
 
@@ -30,6 +31,37 @@ const CallStaffDialog = ({ callback }) => {
   const handleClose = () => {
     if (typeof callback === "function") {
       callback();
+    }
+  };
+
+  const handleSendRequest = async () => {
+    const combinedActions = selectedActions.join(", ");
+    const requestData = {
+      note: `${note} ${combinedActions}`, // Combine note with actions
+      table_id: tableId,
+    };
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/v1/employee`,
+        requestData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response);
+      if (response.data.status === 200) {
+        console.log("Success:", response.data);
+        alert("Yêu cầu hỗ trợ đã được gửi thành công.");
+        handleClose();
+      } else {
+        alert("Failed to send request. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error sending request:", error);
+      alert("Failed to send request. Please try again later.");
     }
   };
 
@@ -60,7 +92,9 @@ const CallStaffDialog = ({ callback }) => {
           </div>
         ))}
       </div>
-      <div className={cx("cs-send-request-button")}>Gửi yêu cầu</div>
+      <div className={cx("cs-send-request-button")} onClick={handleSendRequest}>
+        Gửi yêu cầu
+      </div>
     </div>
   );
 };
