@@ -69,6 +69,10 @@ const AdminLayout = ({ children }) => {
     setIsTableManagementOpen(!isTableManagementOpen);
   };
 
+  const getClassActive = (path) => {
+    return location.pathname === path ? "active" : "";
+  };
+
   return (
     <div className="admin-layout">
       <header className="admin-header">
@@ -89,14 +93,16 @@ const AdminLayout = ({ children }) => {
           <ul>
             {/* Quản lý yêu cầu */}
             <li
-              className="sidebar-section-title"
+              className={`sidebar-section-title ${getClassActive(
+                "/adminhome"
+              )}`}
               onClick={toggleRequestManagement}
             >
               <span>Quản lý yêu cầu</span>
             </li>
             {isRequestManagementOpen && (
               <ul className="sidebar-submenu">
-                <li>
+                <li className={` ${getClassActive("/adminhome")}`}>
                   <a href="/adminhome">Gọi nhân viên</a>
                 </li>
               </ul>
@@ -104,14 +110,16 @@ const AdminLayout = ({ children }) => {
 
             {/* Quản lý bàn */}
             <li
-              className="sidebar-section-title"
+              className={`sidebar-section-title ${getClassActive(
+                "/adminhome/table"
+              )}`}
               onClick={toggleTableManagement}
             >
               <span>Quản lý bàn</span>
             </li>
             {isTableManagementOpen && (
               <ul className="sidebar-submenu">
-                <li>
+                <li className={` ${getClassActive("/adminhome/table")}`}>
                   <a href="/adminhome/table">Danh sách bàn</a>
                 </li>
               </ul>
@@ -119,23 +127,27 @@ const AdminLayout = ({ children }) => {
 
             {/* Quản lý sản phẩm */}
             <li
-              className="sidebar-section-title"
+              className={`sidebar-section-title ${getClassActive(
+                "/adminhome/category"
+              )}`}
               onClick={toggleProductManagement}
             >
               <span>Quản lý sản phẩm</span>
             </li>
             {isProductManagementOpen && (
               <ul className="sidebar-submenu">
-                <li>
+                <li className={` ${getClassActive("/adminhome/category")}`}>
                   <a href="/adminhome/category">Danh mục</a>
                 </li>
-                <li>
+                <li className={` ${getClassActive("/adminhome/option")}`}>
                   <a href="/adminhome/option">Tuỳ chọn</a>
                 </li>
-                <li>
+                <li
+                  className={` ${getClassActive("/adminhome/createproduct")}`}
+                >
                   <a href="/adminhome/createproduct">Tạo sản phẩm</a>
                 </li>
-                <li>
+                <li className={` ${getClassActive("/adminhome/listproduct")}`}>
                   <a href="/adminhome/listproduct">Toàn bộ sản phẩm</a>
                 </li>
               </ul>
@@ -143,14 +155,16 @@ const AdminLayout = ({ children }) => {
 
             {/* Quản lý đơn hàng */}
             <li
-              className="sidebar-section-title"
+              className={`sidebar-section-title ${getClassActive(
+                "/adminhome/order"
+              )}`}
               onClick={toggleOrderManagement}
             >
               <span>Quản lý đơn hàng</span>
             </li>
             {isOrderManagementOpen && (
               <ul className="sidebar-submenu">
-                <li>
+                <li className={` ${getClassActive("/adminhome/order")}`}>
                   <a href="/adminhome/order">Toàn bộ đơn hàng</a>
                 </li>
               </ul>
@@ -158,20 +172,22 @@ const AdminLayout = ({ children }) => {
 
             {/* Phản hồi và thống kê */}
             <li
-              className="sidebar-section-title"
+              className={`sidebar-section-title ${getClassActive(
+                "/adminhome/evaluate"
+              )}`}
               onClick={toggleFeedbackAndStats}
             >
               <span>Phản hồi và thống kê</span>
             </li>
             {isFeedbackAndStatsOpen && (
               <ul className="sidebar-submenu">
-                <li>
+                <li className={` ${getClassActive("/revenue-stats")}`}>
                   <a href="/revenue-stats">Doanh thu</a>
                 </li>
-                <li>
+                <li className={` ${getClassActive("/product-stats")}`}>
                   <a href="/product-stats">Sản phẩm</a>
                 </li>
-                <li>
+                <li className={` ${getClassActive("/adminhome/evaluate")}`}>
                   <a href="/adminhome/evaluate">Khách hàng</a>
                 </li>
               </ul>
@@ -184,5 +200,4 @@ const AdminLayout = ({ children }) => {
     </div>
   );
 };
-
 export default AdminLayout;

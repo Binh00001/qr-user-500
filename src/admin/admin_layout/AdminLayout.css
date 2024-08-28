@@ -93,3 +93,7 @@
     border-bottom: 1px solid #444;
     background-color: #ccc;
 }   
+
+.sidebar-submenu .active{
+    background-color: #A1D6B2;
+}
