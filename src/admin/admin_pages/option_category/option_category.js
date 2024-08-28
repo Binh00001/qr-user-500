@@ -151,7 +151,6 @@ function OptionCategory() {
           },
         }
       );
-      console.log(response.data);
 
       if (response.data.status === 202) {
         alert("Cập nhật tuỳ chọn thành công.");
@@ -163,6 +162,33 @@ function OptionCategory() {
     } catch (err) {
       console.error(err);
       alert("An error occurred while updating the option.");
+    }
+  };
+
+  const handleDeleteOption = async (option) => {
+    console.log(option);
+
+    try {
+      const response = await axios.delete(
+        `http://18.141.222.147:3000/v1/option/${option.id}`,
+        {
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            Authorization: authHeader, // Replace with actual token
+          },
+        }
+      );
+      console.log(response);
+
+      if (response.data.status === 202) {
+        alert("Xoá thành công.");
+        setReload(!reload); // Trigger a reload to fetch updated options
+      } else {
+        alert("Failed to delete option.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred while deleting the option.");
     }
   };
   return (
@@ -287,7 +313,12 @@ function OptionCategory() {
                       >
                         Chỉnh sửa
                       </button>
-                      <button className="delete-button">Xóa</button>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDeleteOption(option)}
+                      >
+                        Xóa
+                      </button>
                     </td>
                   </tr>
                 ))}
