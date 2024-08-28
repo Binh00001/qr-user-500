@@ -19,9 +19,10 @@ const OrderManagement = () => {
   const [searchPhoneNumber, setSearchPhoneNumber] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [orderDetail, setOrderDetail] = useState(null);
+  const [totalPage, setTotalPage] = useState(0);
   useEffect(() => {
     fetchOrders();
-  }, [startDate, endDate, currentPage]);
+  }, [startDate, endDate, currentPage, searchPhoneNumber]);
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -32,10 +33,11 @@ const OrderManagement = () => {
           process.env.REACT_APP_API_URL
         }/v1/order/all?page=${currentPage}&pageSize=${ordersPerPage}&startDate=${moment(
           startDate
-        ).format("YYYY-MM-DD")}&endDate=${moment(endDate).format("YYYY-MM-DD")}`
+        ).format("YYYY-MM-DD")}&endDate=${moment(endDate).format("YYYY-MM-DD")}&phone_number=${searchPhoneNumber}`
       );
       if (response.data.status === 200) {
         setOrders(response.data.listOrder.currentPage || []);
+        setTotalPage(response.data.listOrder.pagesNumber)
       } else {
         setOrders([]);
       }
@@ -146,23 +148,11 @@ const OrderManagement = () => {
     }
   };
 
-  // Filter orders by phone number
-  const filteredOrders = orders.filter((order) =>
-    order.phone_number.includes(searchPhoneNumber)
-  );
-
   // Pagination Logic
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = filteredOrders.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
-  );
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
-
   return (
     <AdminLayout>
       {isDialogOpen && orderDetail && (
@@ -248,7 +238,7 @@ const OrderManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentOrders.map((order, index) => (
+                {orders.map((order, index) => (
                   <tr key={order.id}>
                     <td>{indexOfFirstOrder + index + 1}</td>
                     <td>{order.table_id}</td>
@@ -271,7 +261,7 @@ const OrderManagement = () => {
               </tbody>
             </table>
             <div className="pagination">
-              {[...Array(totalPages)].map((_, index) => (
+              {[...Array(totalPage)].map((_, index) => (
                 <button
                   key={index}
                   className={`pagination-button ${
