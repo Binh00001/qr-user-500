@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import axios from "axios";
-import AdminLayout from "../../admin_layout/adminLayout";
+
 import "./CreateProduct.css";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
@@ -104,7 +104,7 @@ function CreateProduct() {
   };
 
   return (
-    <AdminLayout>
+    <Fragment>
       <div className="create-product-container">
         <form className="create-product-form" onSubmit={handleSubmit}>
           <div className="left-side">
@@ -188,7 +188,7 @@ function CreateProduct() {
                 className="reset-button"
                 onClick={handleReset}
               >
-                Reset
+                Đặt lại
               </button>
               <button type="submit" className="submit-button">
                 Xác nhận
@@ -197,7 +197,7 @@ function CreateProduct() {
           </div>
         </form>
       </div>
-    </AdminLayout>
+    </Fragment>
   );
 }
 

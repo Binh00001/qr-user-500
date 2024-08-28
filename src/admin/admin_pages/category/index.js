@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import "./category.css";
-import AdminLayout from "../../admin_layout/adminLayout";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import ConfirmDialog from "../../admin_components/confirm_dialog";
@@ -153,7 +152,7 @@ function Category() {
   };
 
   return (
-    <AdminLayout>
+    <Fragment>
       {confirmDelete && (
         <ConfirmDialog
           onCancel={handleCancel}
@@ -185,7 +184,7 @@ function Category() {
                 className="reset-button"
                 onClick={handleReset}
               >
-                Reset
+                Đặt lại
               </button>
               <button type="submit" className="submit-button">
                 Tạo danh mục mới
@@ -271,7 +270,7 @@ function Category() {
           </tbody>
         </table>
       </div>
-    </AdminLayout>
+    </Fragment>
   );
 }
 

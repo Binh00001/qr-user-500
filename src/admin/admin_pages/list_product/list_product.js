@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import axios from "axios";
-import AdminLayout from "../../admin_layout/adminLayout";
 import "./ListProduct.css";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 function ListProduct() {
@@ -222,7 +221,7 @@ function ListProduct() {
   };
 
   return (
-    <AdminLayout>
+    <Fragment>
       {isEditing && (
         <div className="edit-product-container">
           <form className="edit-product-form" onSubmit={handleUpdateProduct}>
@@ -388,7 +387,7 @@ function ListProduct() {
           ))}
         </div>
       </div>
-    </AdminLayout>
+    </Fragment>
   );
 }
 

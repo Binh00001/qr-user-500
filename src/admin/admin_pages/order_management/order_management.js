@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import "./OrderManagement.css";
-import AdminLayout from "../../admin_layout/adminLayout";
 
 const OrderManagement = () => {
   const [startDate, setStartDate] = useState(
@@ -33,11 +32,13 @@ const OrderManagement = () => {
           process.env.REACT_APP_API_URL
         }/v1/order/all?page=${currentPage}&pageSize=${ordersPerPage}&startDate=${moment(
           startDate
-        ).format("YYYY-MM-DD")}&endDate=${moment(endDate).format("YYYY-MM-DD")}&phone_number=${searchPhoneNumber}`
+        ).format("YYYY-MM-DD")}&endDate=${moment(endDate).format(
+          "YYYY-MM-DD"
+        )}&phone_number=${searchPhoneNumber}`
       );
       if (response.data.status === 200) {
         setOrders(response.data.listOrder.currentPage || []);
-        setTotalPage(response.data.listOrder.pagesNumber)
+        setTotalPage(response.data.listOrder.pagesNumber);
       } else {
         setOrders([]);
       }
@@ -154,7 +155,7 @@ const OrderManagement = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
-    <AdminLayout>
+    <Fragment>
       {isDialogOpen && orderDetail && (
         <div className="dialog-overlay">
           <div className="dialog-container">
@@ -276,7 +277,7 @@ const OrderManagement = () => {
           </>
         )}
       </div>
-    </AdminLayout>
+    </Fragment>
   );
 };
 

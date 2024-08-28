@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
-import AdminLayout from "../../admin_layout/adminLayout";
 import "./AdminHome.css"; // Make sure to create this CSS file to style the component
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 const AdminHome = () => {
@@ -36,7 +35,7 @@ const AdminHome = () => {
   }, []);
 
   return (
-    <AdminLayout>
+    <Fragment>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -71,7 +70,7 @@ const AdminHome = () => {
           </tbody>
         </table>
       )}
-    </AdminLayout>
+    </Fragment>
   );
 };
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./TableManagement.css";
-import AdminLayout from "../../admin_layout/adminLayout";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import { Fragment } from "react";
 function TableManagement() {
   const [tableName, setTableName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -182,7 +182,7 @@ function TableManagement() {
   };
 
   return (
-    <AdminLayout>
+    <Fragment>
       {!isEditing ? (
         <div className="create-table-container">
           <h1 className="create-table-title">Tạo bàn mới</h1>
@@ -338,7 +338,7 @@ function TableManagement() {
           </tbody>
         </table>
       </div>
-    </AdminLayout>
+    </Fragment>
   );
 }
 

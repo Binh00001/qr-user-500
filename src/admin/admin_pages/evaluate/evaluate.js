@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./evaluate.css"; // Ensure to style accordingly
-import AdminLayout from "../../admin_layout/adminLayout";
 
 const Evaluate = () => {
   // Set default start date to 30 days ago and end date to today
@@ -56,7 +55,7 @@ const Evaluate = () => {
   };
 
   return (
-    <AdminLayout>
+    <Fragment>
       <div className="evaluate-container">
         <h2>Đánh giá của người dùng</h2>
         <div className="filter-container">
@@ -108,7 +107,7 @@ const Evaluate = () => {
           </table>
         )}
       </div>
-    </AdminLayout>
+    </Fragment>
   );
 };
 

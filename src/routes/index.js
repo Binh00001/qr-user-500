@@ -7,6 +7,7 @@ import Menu from "../pages/Menu/indexMenu.js";
 import Order from "../pages/Order/indexOrder.js";
 import Bill from "../pages/Bill/indexBill.js";
 //admin
+import AdminLayout from "../admin/admin_layout/adminLayout.js";
 import AdminLoginScreen from "../admin/admin_login_screen/index.js";
 import AdminHomePage from "../admin/admin_pages/home/AdminHome.js";
 import Category from "../admin/admin_pages/category/index.js";
@@ -29,73 +30,21 @@ const AppRoutes = () => {
         <Route path="/qrview" element={<QrView />} />
         {/* Bảo vệ các đường dẫn quản trị sử dụng RequireAuth */}
         <Route
-          path="/adminhome"
+          path="/adminhome/*"
           element={
             <RequireAuth fallbackPath="/adminlogin">
-              <AdminHomePage />
-            </RequireAuth>
-          }
-        />
-
-        <Route
-          path="/adminhome/category"
-          element={
-            <RequireAuth fallbackPath="/adminlogin">
-              <Category />
-            </RequireAuth>
-          }
-        />
-
-        <Route
-          path="/adminhome/table"
-          element={
-            <RequireAuth fallbackPath="/adminlogin">
-              <TableManagement />
-            </RequireAuth>
-          }
-        />
-
-        <Route
-          path="/adminhome/order"
-          element={
-            <RequireAuth fallbackPath="/adminlogin">
-              <OrderManagement />
-            </RequireAuth>
-          }
-        />
-
-        <Route
-          path="/adminhome/option"
-          element={
-            <RequireAuth fallbackPath="/adminlogin">
-              <OptionCategory />
-            </RequireAuth>
-          }
-        />
-
-        <Route
-          path="/adminhome/createproduct"
-          element={
-            <RequireAuth fallbackPath="/adminlogin">
-              <CreateProduct />
-            </RequireAuth>
-          }
-        />
-
-        <Route
-          path="/adminhome/listproduct"
-          element={
-            <RequireAuth fallbackPath="/adminlogin">
-              <ListProduct />
-            </RequireAuth>
-          }
-        />
-
-        <Route
-          path="/adminhome/evaluate"
-          element={
-            <RequireAuth fallbackPath="/adminlogin">
-              <Evaluate />
+              <AdminLayout>
+                <Routes>
+                  <Route index element={<AdminHomePage />} />
+                  <Route path="category" element={<Category />} />
+                  <Route path="table" element={<TableManagement />} />
+                  <Route path="order" element={<OrderManagement />} />
+                  <Route path="option" element={<OptionCategory />} />
+                  <Route path="createproduct" element={<CreateProduct />} />
+                  <Route path="listproduct" element={<ListProduct />} />
+                  <Route path="evaluate" element={<Evaluate />} />
+                </Routes>
+              </AdminLayout>
             </RequireAuth>
           }
         />

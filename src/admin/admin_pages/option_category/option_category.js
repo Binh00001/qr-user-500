@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import "./OptionCategory.css";
-import AdminLayout from "../../admin_layout/adminLayout";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 function OptionCategory() {
@@ -166,7 +165,7 @@ function OptionCategory() {
     // }
   };
   return (
-    <AdminLayout>
+    <Fragment>
       <div className="option-category-container">
         <h2>Hãy chọn danh mục để tiếp tục</h2>
         <div className="dropdown-container">
@@ -296,7 +295,7 @@ function OptionCategory() {
           </div>
         </>
       )}
-    </AdminLayout>
+    </Fragment>
   );
 }
 
