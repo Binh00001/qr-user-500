@@ -170,7 +170,7 @@ function OptionCategory() {
 
     try {
       const response = await axios.delete(
-        `http://18.141.222.147:3000/v1/option/${option.id}`,
+        `${process.env.REACT_APP_API_URL}/v1/option/${option.id}`,
         {
           headers: {
             Accept: "application/json, text/plain, */*",
