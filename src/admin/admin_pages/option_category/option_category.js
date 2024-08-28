@@ -33,7 +33,7 @@ function OptionCategory() {
     };
 
     fetchCategories();
-  }, [reload]);
+  }, []);
 
   useEffect(() => {
     // Fetch options whenever the selected category changes
@@ -130,39 +130,40 @@ function OptionCategory() {
 
   const editOption = async (e) => {
     e.preventDefault();
+
     if (!editOptionName || !editOptionPrice) {
       alert("Please enter all required fields.");
       return;
     }
 
-    //pending chưa có api
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/v1/option/${editOptionId}`, // URL from cURL command
+        {
+          name: editOptionName,
+          price: editOptionPrice,
+        },
+        {
+          headers: {
+            // Accept: "application/json, text/plain, */*",
+            Authorization: authHeader, // Replace with actual token
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data);
 
-    // try {
-    //   const response = await axios.put(
-    //     `${process.env.REACT_APP_API_URL}/v1/option/${editOptionId}`,
-    //     {
-    //       name: editOptionName,
-    //       price: editOptionPrice,
-    //     },
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: authHeader, // Replace with your actual token
-    //       },
-    //     }
-    //   );
-
-    //   if (response.data.status === 200) {
-    //     alert("Cập nhật tuỳ chọn thành công.");
-    //     handleReset(); // Reset the form after editing
-    //     setReload(!reload); // Trigger a reload to fetch updated options
-    //   } else {
-    //     alert("Failed to update option.");
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   alert("An error occurred while updating the option.");
-    // }
+      if (response.data.status === 202) {
+        alert("Cập nhật tuỳ chọn thành công.");
+        handleReset(); // Reset the form after editing
+        setReload(!reload); // Trigger a reload to fetch updated options
+      } else {
+        alert("Failed to update option.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred while updating the option.");
+    }
   };
   return (
     <Fragment>
