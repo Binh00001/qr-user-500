@@ -166,8 +166,6 @@ function OptionCategory() {
   };
 
   const handleDeleteOption = async (option) => {
-    console.log(option);
-
     try {
       const response = await axios.delete(
         `${process.env.REACT_APP_API_URL}/v1/option/${option.id}`,
@@ -178,7 +176,6 @@ function OptionCategory() {
           },
         }
       );
-      console.log(response);
 
       if (response.data.status === 202) {
         alert("Xoá thành công.");
