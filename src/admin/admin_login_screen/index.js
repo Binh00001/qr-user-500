@@ -15,7 +15,7 @@ function AdminLoginScreen() {
     e.preventDefault();
     axios
       .post(
-        "http://13.215.253.129:3000/v1/auth/login",
+        `${process.env.REACT_APP_API_URL}/v1/auth/login`,
         {
           email: account,
           password: password,
