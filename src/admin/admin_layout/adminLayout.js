@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./AdminLayout.css";
-
+import useSignOut from "react-auth-kit/hooks/useSignOut";
 const AdminLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isTableManagementOpen, setIsTableManagementOpen] = useState(false);
@@ -10,6 +10,7 @@ const AdminLayout = ({ children }) => {
   const [isFeedbackAndStatsOpen, setIsFeedbackAndStatsOpen] = useState(false);
   const [isRequestManagementOpen, setRequestManagementOpen] = useState(false);
 
+  const signOut = useSignOut();
   const location = useLocation();
   useEffect(() => {
     // Preserve menu state based on the path
@@ -73,6 +74,11 @@ const AdminLayout = ({ children }) => {
     return location.pathname === path ? "active" : "";
   };
 
+  const handleLogout = () => {
+    signOut();
+    window.location.reload();
+  };
+
   return (
     <div className="admin-layout">
       <header className="admin-header">
@@ -86,8 +92,12 @@ const AdminLayout = ({ children }) => {
             alt="Avatar"
             className="admin-avatar"
           />
+          <button className="logout-button" onClick={handleLogout}>
+            Đăng xuất
+          </button>
         </div>
       </header>
+
       <div className="admin-body">
         <nav className={`admin-sidebar ${isSidebarOpen ? "open" : "closed"}`}>
           <ul>

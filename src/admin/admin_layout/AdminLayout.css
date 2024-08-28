@@ -97,3 +97,22 @@
 .sidebar-submenu .active{
     background-color: #A1D6B2;
 }
+
+.logout-button {
+    background-color: gray;
+    border: 2px solid black;
+    color: black;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 20px; /* Adjust margin as needed */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+  
+  .logout-button:hover {
+    background-color: red;
+    color: white;
+    border-color: red;
+  }
+  
