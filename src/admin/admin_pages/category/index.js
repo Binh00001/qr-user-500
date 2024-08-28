@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import "./category.css";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import ConfirmDialog from "../../admin_components/confirm_dialog";
+import ConfirmDialog from "../../admin_components/confirm_dialog/confirm_dialog";
 function Category() {
   const [categoryName, setCategoryName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");

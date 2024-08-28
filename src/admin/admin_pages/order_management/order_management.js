@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import "./OrderManagement.css";
+import Pagination from "../../admin_components/pagination/pagination";
 
 const OrderManagement = () => {
   const [startDate, setStartDate] = useState(
@@ -261,19 +262,11 @@ const OrderManagement = () => {
                 ))}
               </tbody>
             </table>
-            <div className="pagination">
-              {[...Array(totalPage)].map((_, index) => (
-                <button
-                  key={index}
-                  className={`pagination-button ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
-                  onClick={() => paginate(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
-            </div>
+            <Pagination
+              totalPages={totalPage}
+              currentPage={currentPage}
+              onPageChange={paginate}
+            />
           </>
         )}
       </div>

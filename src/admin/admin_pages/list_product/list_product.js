@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, Fragment } from "react";
 import axios from "axios";
 import "./ListProduct.css";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import Pagination from "../../admin_components/pagination/pagination";
 function ListProduct() {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -95,10 +96,6 @@ function ListProduct() {
     }
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -116,6 +113,11 @@ function ListProduct() {
     setProductQuantity(product.quantity);
     setProductImage(product.image); // Store current image
     setNewProductImage(null); // Reset new image
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // You might want to fetch new data based on the selected page here
   };
 
   const handleImageChange = (e) => {
@@ -378,19 +380,12 @@ function ListProduct() {
           </tbody>
         </table>
 
-        <div className="pagination">
-          {[...Array(totalPages)].map((_, index) => (
-            <button
-              key={index}
-              className={`pagination-button ${
-                currentPage === index + 1 ? "active" : ""
-              }`}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+        {/* Your other code here */}
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </Fragment>
   );
