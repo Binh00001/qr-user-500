@@ -217,7 +217,7 @@ function OptionCategory() {
                     className="reset-button"
                     onClick={handleReset}
                   >
-                    Reset
+                    Đặt lại
                   </button>
                   <button type="submit" className="submit-button">
                     Tạo tùy chọn mới

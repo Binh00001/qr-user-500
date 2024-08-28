@@ -164,7 +164,7 @@ function ListProduct() {
       formData.append("quantity", productQuantity);
     }
 
-    if (newProductImage) {
+    if (newProductImage != null) {
       formData.append("image", newProductImage);
     }
 
@@ -346,6 +346,7 @@ function ListProduct() {
           <thead>
             <tr>
               <th>STT</th>
+              <th>Ảnh</th> {/* Thêm tiêu đề cột cho ảnh */}
               <th>Tên sản phẩm</th>
               <th>Giá</th>
               <th>Mô tả</th>
@@ -357,6 +358,9 @@ function ListProduct() {
             {products.map((product, index) => (
               <tr key={product.id}>
                 <td>{index + 1 + (currentPage - 1) * 10}</td>
+                <td>
+                  <img src={product.image} alt="Product" /> {/* Hiển thị ảnh */}
+                </td>
                 <td>{product.name}</td>
                 <td>{formatCurrency(product.price)}</td>
                 <td>{product.description}</td>
@@ -373,6 +377,7 @@ function ListProduct() {
             ))}
           </tbody>
         </table>
+
         <div className="pagination">
           {[...Array(totalPages)].map((_, index) => (
             <button
