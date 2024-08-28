@@ -98,10 +98,10 @@ function HomePage() {
       <div className={cx("page--content")}>
         <Fragment>
           <div className={cx("restaurant-info-container")}>
-            <div className={cx("name")}>Tên Nhà Hàng</div>
+            <div className={cx("name")}>Bánh mỳ Ô Long</div>
             <div className={cx("address")}>
               <img src={location} alt="ICON" />
-              Địa chỉ nhà hàng ở 123 123 123
+              Địa chỉ:
             </div>
           </div>
           <div className={cx("banner-container")}>
