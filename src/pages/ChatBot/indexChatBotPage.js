@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./chatbotPage.scss";
 import classNames from "classnames";
+import axios from "axios";
 import leftArrow from "../../assets/image/Icon/left-arrow.png";
 const cx = classNames.bind(styles);
 
@@ -9,22 +10,64 @@ const ChatBotPage = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const chatContainerRef = useRef(null);
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (input.trim()) {
       const newUserMessage = { text: input, from: "user" };
-      setMessages([...messages, newUserMessage]);
+      setMessages((prevMessages) => [...prevMessages, newUserMessage]);
       setInput("");
+      setIsLoading(true); // Start loading
 
-      // Simulate a server/bot response
-      setTimeout(() => {
-        const botResponse = { text: `Echo: ${input}`, from: "bot" };
-        setMessages((prevMessages) => [...prevMessages, botResponse]);
-      }, 1000); // Delay the response to simulate network latency
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/v1/chat`,
+          {
+            message: input,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = response.data;
+        if (data && data.chatBot) {
+          const botResponse = { text: data.chatBot, from: "bot" };
+          setMessages((prevMessages) => {
+            // Remove the loading indicator before adding the actual response
+            const updatedMessages = prevMessages.filter(
+              (msg) => msg.text !== "Vui lòng chờ ... "
+            );
+            return [...updatedMessages, botResponse];
+          });
+        }
+      } catch (error) {
+        console.error("Error sending message:", error);
+        const errorMessage = {
+          text: "Có lỗi xảy ra khi gửi tin nhắn.",
+          from: "bot",
+        };
+        setMessages((prevMessages) => {
+          const updatedMessages = prevMessages.filter(
+            (msg) => msg.text !== "Vui lòng chờ ... "
+          );
+          return [...updatedMessages, errorMessage];
+        });
+      } finally {
+        setIsLoading(false); // Stop loading
+      }
     }
   };
 
@@ -36,7 +79,7 @@ const ChatBotPage = () => {
         </button>
         <h1 className={cx("title")}>Chat bot</h1>
       </div>
-      <div className={cx("chat-container")}>
+      <div className={cx("chat-container")} ref={chatContainerRef}>
         {messages.map((message, index) => (
           <div
             key={index}
@@ -45,8 +88,12 @@ const ChatBotPage = () => {
             {message.text}
           </div>
         ))}
+        {isLoading && (
+          <div className={cx("message", "from-bot")}>
+            <span>Vui lòng chờ ... </span> {/* Loading indicator */}
+          </div>
+        )}
       </div>
-      <div></div>
       <div className={cx("input-container")}>
         <input
           type="text"

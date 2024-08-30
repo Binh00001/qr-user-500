@@ -10,7 +10,7 @@
     padding: 10px 16px;
     background-color: #86ab89;
     color: #ffffff;
-
+    border-bottom: 1px solid gray;
     .back-button {
       // margin-right: 20px;
       background: none;
@@ -24,7 +24,7 @@
     }
 
     .title {
-      font-size: 20;
+      font-size: 20px; /* Added 'px' for consistency */
       width: 100%;
       padding: 8px 0;
       text-align: center;

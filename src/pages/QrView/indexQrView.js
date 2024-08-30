@@ -24,7 +24,7 @@ function QrView() {
 
   const handleCopyAccountNumber = () => {
     // Replace '123456789' with the actual account number you want to copy
-    if (bankNumber != "") {
+    if (bankNumber !== "") {
       var copyText = bankNumber;
 
       // Copy the text inside the text field

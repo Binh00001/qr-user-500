@@ -80,9 +80,9 @@ function Order() {
     setShowDetailProduct(true);
   };
 
-  const handleActionClick = (e) => {
-    e.stopPropagation(); // Ngăn sự kiện nổi bọt để không kích hoạt hàm handleOpenDetail khi nhấn vào các nút trong 'action-with-item-in-cart'
-  };
+  // const handleActionClick = (e) => {
+  //   e.stopPropagation(); // Ngăn sự kiện nổi bọt để không kích hoạt hàm handleOpenDetail khi nhấn vào các nút trong 'action-with-item-in-cart'
+  // };
 
   function addToCartLocalWithNote(product, quantity, note, selectedOption) {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
