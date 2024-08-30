@@ -26,11 +26,12 @@ function HomePage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [tableId, setTableId] = useState(null);
+  const [tableName, setTableName] = useState("Lỗi");
   const { token } = useParams();
   const [showRequestName, setShowRequestName] = useState(false);
   const [showCallStaffDialog, setShowCallStaffDialog] = useState(false);
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
-
+  const [isActive, setIsActive] = useState(false);
   const options = {
     delay: 2000,
   };
@@ -41,6 +42,9 @@ function HomePage() {
       fetchTableInfo(token);
     }
   }, [token]);
+
+  const defaultAuth =
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6Imh1eSIsInBob25lbnVtYmVyIjoiOTk5OTk5OSIsImVtYWlsIjoibmd1eWVucXVhbmdodXltdDFAZ21haWwuY29tIiwiYWdlIjoyMCwiYWRkcmVzcyI6Ik5hbSDEkOG7i25oIiwicGFzc3dvcmQiOiIkMmIkMDgkN243SDRyR1RoeEtyQnpHZlNRTUJIdVpTemNIaXg3dVhrVW1mem95RGJrRFhYMnlCaC4wUnEiLCJjcmVhdGVkQXQiOiIyMDI0LTA4LTA0VDA3OjAyOjEwLjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTA4LTA0VDA3OjAyOjEwLjAwMFoiLCJpYXQiOjE3MjUwNDEyMzYsImV4cCI6MTcyNzYzMzIzNn0.lfSiRNusfnGCH26jEkE_g51vMA_8QYcn1lCInwnw_qY";
 
   useEffect(() => {
     const storedName = localStorage.getItem("cusName");
@@ -60,13 +64,18 @@ function HomePage() {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: defaultAuth,
           },
           params: {
             uuid: uuid,
           },
         }
       );
-      console.log(response);
+      if (true) {
+        setIsActive(true);
+        setTableId(1);
+        setTableName("A2");
+      }
     } catch (error) {
       console.error("Error fetching table information:", error);
     }
@@ -159,40 +168,56 @@ function HomePage() {
               <div className={cx("text")}>
                 Chúng tôi sẽ trả đồ cho bạn tại bàn:{" "}
               </div>
-              <div className={cx("table")}>2B</div>
+              <div className={cx("table")}>{tableName}</div>
             </div>
           </div>
           <div className={cx("interaction--container")}>
-            <InteractionItem
-              iconName={billing}
-              description="Xem hoá đơn"
-              backgroundColor="#FFB72B"
-              callback={() => navigate("/bill")}
-            />
+            {isActive ? (
+              <InteractionItem
+                iconName={billing}
+                description="Xem hoá đơn"
+                backgroundColor="#FFB72B"
+                callback={() => navigate("/bill")}
+              />
+            ) : (
+              <div> </div>
+            )}
+
             <InteractionItem
               iconName={person}
               description="Gọi nhân viên"
               backgroundColor="#92B4EC"
               callback={() => setShowCallStaffDialog(true)}
             />
-            <InteractionItem
-              iconName={comment}
-              description="Đánh giá"
-              backgroundColor="#AACB73"
-              callback={() => setShowFeedbackDialog(true)}
-            />
+            {isActive ? (
+              <InteractionItem
+                iconName={comment}
+                description="Đánh giá"
+                backgroundColor="#AACB73"
+                callback={() => setShowFeedbackDialog(true)}
+              />
+            ) : (
+              <div />
+            )}
           </div>
-          <div
-            className={cx("menu-navigate-button")}
-            onClick={() => navigate("/menu")}
-          >
-            <div className={cx("image-icon")}>
-              <img src={food} alt="ICON" />
+          {isActive ? (
+            <div
+              className={cx("menu-navigate-button")}
+              onClick={() => navigate("/menu")}
+            >
+              <div className={cx("image-icon")}>
+                <img src={food} alt="ICON" />
+              </div>
+              <div className={cx("text-description-menu")}>
+                Xem Menu - Gọi món
+              </div>
             </div>
-            <div className={cx("text-description-menu")}>
-              Xem Menu - Gọi món
+          ) : (
+            <div className={cx("unactive-table-warning")}>
+              Bàn này đã bị vô hiệu hoá
             </div>
-          </div>
+          )}
+
           <div className={cx("chat-icon")} onClick={() => navigate("/chatbot")}>
             <img src={chatbot} alt="Chat with AI" />
           </div>
