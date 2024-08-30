@@ -43,6 +43,8 @@ const ChatBotPage = () => {
           }
         );
         const data = response.data;
+        console.log(data.chatBot);
+
         if (data && data.chatBot) {
           const botResponse = { text: data.chatBot, from: "bot" };
           setMessages((prevMessages) => {
