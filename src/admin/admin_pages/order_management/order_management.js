@@ -155,6 +155,21 @@ const OrderManagement = () => {
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  function formatOrderDate(createdAt) {
+    const date = new Date(createdAt);
+
+    // Extracting individual components
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1; // Months are zero-indexed
+
+    // Formatting to "giờ:phút ngày/tháng"
+    return `${hours < 10 ? "0" : ""}${hours}:${
+      minutes < 10 ? "0" : ""
+    }${minutes} ${day < 10 ? "0" : ""}${day}/${month < 10 ? "0" : ""}${month}`;
+  }
   return (
     <Fragment>
       {isDialogOpen && orderDetail && (
@@ -167,7 +182,7 @@ const OrderManagement = () => {
               ×
             </button>
             <div className="dialog-content">
-              <h2>Chi tiết đơn hàng</h2>
+              <h2>Chi tiết đơn hàng </h2>
               <table className="detail-table">
                 <thead>
                   <tr>
@@ -231,6 +246,7 @@ const OrderManagement = () => {
               <thead>
                 <tr>
                   <th>Số thứ tự</th>
+                  <th>Thời gian tạo</th>
                   <th>Số bàn</th>
                   <th>Tổng tiền</th>
                   <th>Số điện thoại</th>
@@ -243,6 +259,7 @@ const OrderManagement = () => {
                 {orders.map((order, index) => (
                   <tr key={order.id}>
                     <td>{indexOfFirstOrder + index + 1}</td>
+                    <td>{formatOrderDate(order.createdAt)}</td>
                     <td>{order.table_id}</td>
                     <td className="order-total">
                       {formatCurrency(order.total_price)}
