@@ -28,7 +28,7 @@ const AdminLayout = ({ children }) => {
       setIsOrderManagementOpen(true);
     } else if (
       path.includes("/adminhome/revenue") ||
-      path.includes("/adminhome/product-stats") ||
+      path.includes("/adminhome/statistic") ||
       path.includes("/adminhome/evaluate")
     ) {
       setIsFeedbackAndStatsOpen(true);
@@ -194,10 +194,8 @@ const AdminLayout = ({ children }) => {
                 <li className={` ${getClassActive("/adminhome/revenue")}`}>
                   <a href="/adminhome/revenue">Doanh thu</a>
                 </li>
-                <li
-                  className={` ${getClassActive("/adminhome/product-stats")}`}
-                >
-                  <a href="/adminhome/product-stats">Sản phẩm</a>
+                <li className={` ${getClassActive("/adminhome/statistic")}`}>
+                  <a href="/adminhome/statistic">Sản phẩm</a>
                 </li>
                 <li className={` ${getClassActive("/adminhome/evaluate")}`}>
                   <a href="/adminhome/evaluate">Khách hàng</a>
