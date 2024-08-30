@@ -37,6 +37,9 @@ function HomePage() {
 
   useEffect(() => {
     localStorage.setItem("token", token);
+    if (token != "") {
+      fetchTableInfo(token);
+    }
   }, [token]);
 
   useEffect(() => {
@@ -49,6 +52,25 @@ function HomePage() {
       setPhone(storedPhone);
     }
   }, [showRequestName]);
+
+  const fetchTableInfo = async (uuid) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/v1/table`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          params: {
+            uuid: uuid,
+          },
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error fetching table information:", error);
+    }
+  };
 
   const handleNameSubmitted = (newName, newPhone) => {
     // Save the updated name and phone to local storage
