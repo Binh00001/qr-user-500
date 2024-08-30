@@ -147,7 +147,7 @@ function Order() {
           state: {
             qrUrl: response.data.ListOrder.qr_url,
             // bankAccount: response.data.ListOrder.bankNumber,
-            bankAccount: "123123123",
+            bankAccount: "091120021111",
           },
         });
         console.log("Order created successfully:", response.data);
