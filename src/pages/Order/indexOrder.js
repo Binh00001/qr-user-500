@@ -144,7 +144,11 @@ function Order() {
       if (response.status === 200) {
         clearCart();
         navigate("/qrview", {
-          state: { qrUrl: response.data.ListOrder.qr_url },
+          state: {
+            qrUrl: response.data.ListOrder.qr_url,
+            // bankAccount: response.data.ListOrder.bankNumber,
+            bankAccount: "123123123",
+          },
         });
         console.log("Order created successfully:", response.data);
         // Perform any other actions, e.g., updating UI or notifying the user

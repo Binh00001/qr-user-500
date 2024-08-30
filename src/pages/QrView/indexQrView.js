@@ -10,20 +10,29 @@ function QrView() {
   const navigate = useNavigate();
   const location = useLocation(); // To access passed state
   const [qrUrl, setQrUrl] = useState("");
+  const [bankNumber, setBankNumber] = useState("");
 
   useEffect(() => {
-    console.log(location.state);
-
     // Get qrUrl from location state
     if (location.state && location.state.qrUrl) {
       setQrUrl(location.state.qrUrl);
+    }
+    if (location.state && location.state.bankAccount) {
+      setBankNumber(location.state.bankAccount);
     }
   }, [location.state]);
 
   const handleCopyAccountNumber = () => {
     // Replace '123456789' with the actual account number you want to copy
-    navigator.clipboard.writeText("123456789");
-    alert("Số tài khoản đã được sao chép!");
+    if (bankNumber != "") {
+      var copyText = bankNumber;
+
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText);
+
+      // Alert the copied text
+      alert("Sao chép số tài khoản: " + copyText);
+    }
   };
 
   const handleSaveQrCode = () => {
