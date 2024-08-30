@@ -8,10 +8,17 @@ const cx = classNames.bind(styles);
 
 const ChatBotPage = () => {
   const navigate = useNavigate();
-  const [messages, setMessages] = useState([]);
+  // Initialize messages state with a welcome message
+  const [messages, setMessages] = useState([
+    {
+      text: "Xin chào bạn đến với Bánh mì Ô Long. Tôi có thể giúp gì cho bạn?",
+      from: "bot",
+    },
+  ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const chatContainerRef = useRef(null);
+
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
