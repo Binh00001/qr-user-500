@@ -19,6 +19,7 @@ import ListProduct from "../admin/admin_pages/list_product/list_product.js";
 import Evaluate from "../admin/admin_pages/evaluate/evaluate.js";
 import QrView from "../pages/QrView/indexQrView.js";
 import ChatBotPage from "../pages/ChatBot/indexChatBotPage.js";
+import Revenue from "../admin/admin_pages/revenue/revenue.js";
 const AppRoutes = () => {
   return (
     <Router>
@@ -45,6 +46,7 @@ const AppRoutes = () => {
                   <Route path="createproduct" element={<CreateProduct />} />
                   <Route path="listproduct" element={<ListProduct />} />
                   <Route path="evaluate" element={<Evaluate />} />
+                  <Route path="revenue" element={<Revenue />} />
                 </Routes>
               </AdminLayout>
             </RequireAuth>

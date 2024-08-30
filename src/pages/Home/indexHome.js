@@ -37,7 +37,7 @@ function HomePage() {
 
   useEffect(() => {
     localStorage.setItem("token", token);
-    if (token != "") {
+    if (token !== "") {
       fetchTableInfo(token);
     }
   }, [token]);
