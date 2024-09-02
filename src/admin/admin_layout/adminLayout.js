@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./AdminLayout.css";
 import useSignOut from "react-auth-kit/hooks/useSignOut";
+import logo2 from "../../assets/image/logo_quan.png";
+
 const AdminLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isTableManagementOpen, setIsTableManagementOpen] = useState(false);
@@ -88,7 +90,7 @@ const AdminLayout = ({ children }) => {
             <p className="admin-role">Administrator</p>
           </div>
           <img
-            src="https://via.placeholder.com/40"
+            src={logo2}
             alt="Avatar"
             className="admin-avatar"
           />

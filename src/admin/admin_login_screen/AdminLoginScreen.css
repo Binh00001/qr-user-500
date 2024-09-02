@@ -1,12 +1,12 @@
 .login-container {
     display: flex;
     height: 100vh;
-    background-color: #f7f7f7;
+    background-color: #f8f9fa;
 }
 
 .login-left {
     flex: 1;
-    background-color: #fff;
+    background-color: #f8f9fa;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -16,14 +16,14 @@
 
 .login-left .login-image {
     width: 100%;
-    max-width: 400px;
+    max-width: 300px;
     margin-bottom: 20px;
 }
 
 .app-name {
     font-size: 3rem;
     color: #FF6F61;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .app-slogan {
@@ -69,7 +69,7 @@
     padding: 10px;
     font-size: 1.5rem;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 5px;
     box-sizing: border-box;
 }
 

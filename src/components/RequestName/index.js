@@ -67,7 +67,7 @@ function RequestName({
       <div className={cx("welcome-icon")}>
         <img src={helloText} alt="Hello"></img>
       </div>
-      <div className={cx("welcome-text")}>Chào mừng bạn đến Tên cửa hàng!</div>
+      <div className={cx("welcome-text")}>Chào mừng bạn đến Bánh Mỳ Ô Long!</div>
       <div className={cx("welcome-subtext")}>
         Mời bạn nhập tên và số điện thoại để nhà hàng phục vụ bạn nhanh chóng
         hơn, chính xác hơn
