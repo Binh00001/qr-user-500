@@ -79,19 +79,16 @@ function Statistic() {
             </thead>
             <tbody>
               {statisticsData.map((item) => {
-                const totalPrice = item.totalQuantity * item.dishInfo.price; // Calculate total price
+                const totalPrice = item.totalQuantity * item.price; // Calculate total price
                 return (
-                  <tr key={item.dishInfo.id}>
-                    <td>{item.dishInfo.name}</td>
+                  <tr key={item.dish_id}>
+                    <td>{item.name}</td>
                     <td>{item.totalQuantity}</td>
                     <td>
-                      {parseInt(item.dishInfo.price, 10).toLocaleString(
-                        "vi-VN",
-                        {
-                          style: "currency",
-                          currency: "VND",
-                        }
-                      )}
+                      {parseInt(item.price, 10).toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
                     </td>
                     <td>
                       {parseInt(totalPrice, 10).toLocaleString("vi-VN", {

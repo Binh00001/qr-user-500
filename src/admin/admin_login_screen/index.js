@@ -3,6 +3,7 @@ import "./AdminLoginScreen.css";
 import axios from "axios";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
 import { Navigate, useNavigate } from "react-router-dom";
+import logo from "../../assets/image/Break.png";
 function AdminLoginScreen() {
   // State để lưu tài khoản, mật khẩu và lỗi
   const [account, setAccount] = useState("");
@@ -55,12 +56,12 @@ function AdminLoginScreen() {
     <div className="login-container">
       <div className="login-left">
         <img
-          src="https://via.placeholder.com/500x500"
+          src={logo}
           alt="App"
           className="login-image"
         />
-        <h1 className="app-name">Tên cửa hàng</h1>
-        <p className="app-slogan">Slogan cửa hàng</p>
+        <h1 className="app-name">Bánh Mỳ Ô Long</h1>
+        <p className="app-slogan">Tất cả cho khách hàng - Khách hàng cho tất cả</p>
       </div>
       <div className="login-right">
         <h2 className="login-title">Đăng nhập</h2>
@@ -70,7 +71,7 @@ function AdminLoginScreen() {
             <input
               type="text"
               id="account"
-              placeholder="account"
+              placeholder="Email"
               value={account}
               onChange={(e) => setAccount(e.target.value)}
             />

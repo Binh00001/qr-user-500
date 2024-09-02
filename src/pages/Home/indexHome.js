@@ -26,7 +26,7 @@ function HomePage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [tableId, setTableId] = useState(null);
-  const [tableName, setTableName] = useState("Lỗi");
+  const [tableName, setTableName] = useState("...");
   const { token } = useParams();
   const [showRequestName, setShowRequestName] = useState(false);
   const [showCallStaffDialog, setShowCallStaffDialog] = useState(false);
@@ -43,9 +43,6 @@ function HomePage() {
     }
   }, [token]);
 
-  const defaultAuth =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6Imh1eSIsInBob25lbnVtYmVyIjoiOTk5OTk5OSIsImVtYWlsIjoibmd1eWVucXVhbmdodXltdDFAZ21haWwuY29tIiwiYWdlIjoyMCwiYWRkcmVzcyI6Ik5hbSDEkOG7i25oIiwicGFzc3dvcmQiOiIkMmIkMDgkN243SDRyR1RoeEtyQnpHZlNRTUJIdVpTemNIaXg3dVhrVW1mem95RGJrRFhYMnlCaC4wUnEiLCJjcmVhdGVkQXQiOiIyMDI0LTA4LTA0VDA3OjAyOjEwLjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTA4LTA0VDA3OjAyOjEwLjAwMFoiLCJpYXQiOjE3MjUwNDEyMzYsImV4cCI6MTcyNzYzMzIzNn0.lfSiRNusfnGCH26jEkE_g51vMA_8QYcn1lCInwnw_qY";
-
   useEffect(() => {
     const storedName = localStorage.getItem("cusName");
     const storedPhone = localStorage.getItem("cusPhone");
@@ -60,21 +57,13 @@ function HomePage() {
   const fetchTableInfo = async (uuid) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/v1/table`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: defaultAuth,
-          },
-          params: {
-            uuid: uuid,
-          },
-        }
+        `${process.env.REACT_APP_API_URL}/v1/table/${uuid}`
       );
-      if (true) {
-        setIsActive(true);
-        setTableId(1);
-        setTableName("A2");
+
+      if (!!response?.data?.listTable) {
+        setIsActive(response?.data?.listTable?.status === "active");
+        setTableId(response?.data?.listTable?.id);
+        setTableName(response?.data?.listTable?.name);
       }
     } catch (error) {
       console.error("Error fetching table information:", error);
@@ -214,7 +203,9 @@ function HomePage() {
             </div>
           ) : (
             <div className={cx("unactive-table-warning")}>
-              Bàn này đã bị vô hiệu hoá
+              Bàn này chưa được bật hoặc sai QR code.
+              <br />
+              Vui lòng quét lại mã QR trên mặt bàn.
             </div>
           )}
 
