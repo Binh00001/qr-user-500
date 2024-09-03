@@ -122,7 +122,7 @@ function HomePage() {
       <div className={cx("page--content")}>
         <Fragment>
           <div className={cx("restaurant-info-container")}>
-            <div className={cx("name")}>Bánh mỳ Ô Long</div>
+            <div className={cx("name")}>Bánh Mì Ô Long</div>
             <div className={cx("address")}>
               <img src={location} alt="ICON" />
               Địa chỉ:
