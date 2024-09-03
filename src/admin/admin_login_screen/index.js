@@ -60,7 +60,7 @@ function AdminLoginScreen() {
           alt="App"
           className="login-image"
         />
-        <h1 className="app-name">Bánh Mỳ Ô Long</h1>
+        <h1 className="app-name">Bánh Mì Ô Long</h1>
         <p className="app-slogan">Tất cả cho khách hàng - Khách hàng cho tất cả</p>
       </div>
       <div className="login-right">
