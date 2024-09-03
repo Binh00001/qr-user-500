@@ -125,7 +125,7 @@ function HomePage() {
             <div className={cx("name")}>Bánh Mì Ô Long</div>
             <div className={cx("address")}>
               <img src={location} alt="ICON" />
-              Địa chỉ:
+              Địa chỉ: 132 Cổ Nhuế, Bắc Từ Liêm, Hà Nội
             </div>
           </div>
           <div className={cx("banner-container")}>
