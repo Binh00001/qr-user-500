@@ -33,6 +33,8 @@ const OrderManagement = () => {
   }, [startDate, endDate, currentPage, searchPhoneNumber]);
 
   const fetchOrders = async () => {
+    console.log("load order");
+
     setLoading(true);
     setError(null);
     try {
