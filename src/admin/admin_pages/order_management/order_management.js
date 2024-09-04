@@ -20,8 +20,16 @@ const OrderManagement = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [orderDetail, setOrderDetail] = useState(null);
   const [totalPage, setTotalPage] = useState(0);
+
   useEffect(() => {
-    fetchOrders();
+    fetchOrders(); // Initial fetch
+
+    const interval = setInterval(() => {
+      fetchOrders(); // Fetch orders every 30 seconds
+    }, 30000);
+
+    // Cleanup the interval on component unmount or dependency change
+    return () => clearInterval(interval);
   }, [startDate, endDate, currentPage, searchPhoneNumber]);
 
   const fetchOrders = async () => {
