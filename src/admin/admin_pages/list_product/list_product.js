@@ -221,6 +221,31 @@ function ListProduct() {
       fileInputRef.current.value = ""; // Clear the file input
     }
   };
+  const handleDeleteProduct = (productId) => {
+    const url = `${process.env.REACT_APP_API_URL}/v1/Dish/${productId}`;  // Sử dụng API đúng định dạng
+    const config = {
+      headers: {
+        Authorization: authHeader,
+      },
+    };
+  
+    axios
+      .delete(url, config)
+      .then((response) => {
+        if (response.status === 200) {
+          alert(`Xoá sản phẩm thành công.`);
+          fetchProducts(); // Làm mới danh sách sản phẩm sau khi xóa
+        } else {
+          alert("Xảy ra lỗi khi xoá sản phẩm");
+        }
+      })
+      .catch((error) => {
+        alert("Xảy ra lỗi khi xoá sản phẩm");
+        console.error("Error deleting product:", error);
+      });
+  };
+
+
 
   return (
     <Fragment>
@@ -353,7 +378,7 @@ function ListProduct() {
               <th>Giá</th>
               <th>Mô tả</th>
               <th>Số lượng</th>
-              <th>Sửa thông tin</th>
+              <th>Hoạt động</th>
             </tr>
           </thead>
           <tbody>
@@ -361,18 +386,18 @@ function ListProduct() {
               <tr key={product.id}>
                 <td>{index + 1 + (currentPage - 1) * 10}</td>
                 <td>
-                  <img src={product.image} alt="Product" /> {/* Hiển thị ảnh */}
+                  <img src={product.image} alt="Product" />
                 </td>
                 <td>{product.name}</td>
                 <td>{formatCurrency(product.price)}</td>
                 <td>{product.description}</td>
                 <td>{product.quantity}</td>
                 <td>
-                  <button
-                    className="edit-button"
-                    onClick={() => handleEditProduct(product)}
-                  >
+                  <button className="edit-button" onClick={() => handleEditProduct(product)}>
                     Sửa
+                  </button>
+                  <button className="delete-button" onClick={() => handleDeleteProduct(product.id)}>
+                    Xóa
                   </button>
                 </td>
               </tr>

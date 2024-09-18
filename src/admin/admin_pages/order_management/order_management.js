@@ -82,6 +82,8 @@ const OrderManagement = () => {
   };
 
   const formatCurrency = (amount) => {
+    console.log(amount);
+    
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
@@ -176,10 +178,12 @@ const OrderManagement = () => {
     const month = date.getUTCMonth() + 1; // Months are zero-indexed
 
     // Formatting to "giờ:phút ngày/tháng"
+
+    
     return `${hours < 10 ? "0" : ""}${hours}:${
       minutes < 10 ? "0" : ""
     }${minutes} ${day < 10 ? "0" : ""}${day}/${month < 10 ? "0" : ""}${month}`;
-  }
+  }    console.log(1111111,orderDetail);
   return (
     <Fragment>
       {isDialogOpen && orderDetail && (
@@ -210,7 +214,7 @@ const OrderManagement = () => {
                       <td>{formatCurrency(dish.price)}</td>
                       <td>{dish.orderdishes.quantity}</td>
                       <td>
-                        {formatCurrency(dish.price * dish.orderdishes.quantity)}
+                        {formatCurrency(+dish.price * +dish.orderdishes.quantity)}
                       </td>
                       <td>{dish.orderdishes.note}</td>
                     </tr>

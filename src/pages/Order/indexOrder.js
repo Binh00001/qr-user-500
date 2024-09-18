@@ -105,12 +105,17 @@ function Order() {
     setReloadCart((prev) => !prev); // Assuming state to re-render is managed elsewhere
   }
 
+
   const sendOrder = async (cartItems, tableId) => {
     try {
+
+      // Lấy UUID từ localStorage
+      const uuid = localStorage.getItem("token") || "";
       // Prepare the order data from CartItems
       const orderData = {
         table_id: tableId,
         phone_number: localStorage.getItem("cusPhone") || "", // Assuming the phone number is stored in localStorage
+        uuid: uuid, // Thêm UUID vào orderData
         dishes: cartItems.map((item) => {
           // Construct dish object
           const dish = {
@@ -135,7 +140,6 @@ function Order() {
         {
           headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${authToken}`,
           },
         }
       );
@@ -143,14 +147,9 @@ function Order() {
       // Handle the response as needed
       if (response.status === 200) {
         clearCart();
-        navigate("/qrview", {
-          state: {
-            qrUrl: response.data.ListOrder.qr_url,
-            // bankAccount: response.data.ListOrder.bankNumber,
-            bankAccount: "091120021111",
-          },
-        });
-        console.log("Order created successfully:", response.data);
+        console.log("Order created successfully:", response.data.ListOrder.qr_url);
+        window.location.href = response.data.ListOrder.qr_url;
+
         // Perform any other actions, e.g., updating UI or notifying the user
       } else {
         alert("Xảy ra lỗi khi tạo đơn.");

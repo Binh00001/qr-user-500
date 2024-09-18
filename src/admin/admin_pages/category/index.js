@@ -240,8 +240,8 @@ function Category() {
             <tr>
               <th>STT</th>
               <th>Tên</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              <th>sửa</th>
+              <th>Xóa</th>
             </tr>
           </thead>
           <tbody>
