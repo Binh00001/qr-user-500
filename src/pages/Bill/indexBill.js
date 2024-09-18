@@ -45,7 +45,20 @@ function Bill() {
 
         if (response.data.status === 200) {
           console.log(response.data.listOrder.currentPage);
-
+          if (!!response?.data?.listOrder?.currentPage?.length) {
+            const data = response?.data?.listOrder?.currentPage
+            data.map((order) => {
+              if (order.status === 'pending') {
+                order.status = 'đang chuẩn bị'
+              }
+              if (order.status === 'completed') {
+                order.status = 'đã thanh toán'
+              }
+              if (order.status === 'cancelled') {
+                order.status = 'đã bị hủy'
+              }
+            })
+          }
           setOrderHistory(response.data.listOrder.currentPage);
         } else {
           setError("Không thể tải lịch sử đơn hàng.");
@@ -62,6 +75,9 @@ function Bill() {
   }, [phoneNumber, token]);
 
   const handleOrderClick = (order) => {
+    if (order.status === "đang chuẩn bị" && !!order.qr_url) {
+      order['isShowButton'] = true
+    }
     setSelectedOrder(order);
     setShowDialog(true);
   };
@@ -73,7 +89,7 @@ function Bill() {
 
   const handleViewQr = () => {
     if (selectedOrder && selectedOrder.qr_url) {
-      navigate("/qrview", { state: { qrUrl: selectedOrder.qr_url } });
+      window.location.href = selectedOrder.qr_url;
     }
   };
 
@@ -161,7 +177,7 @@ function Bill() {
                     <p>
                       Giá:{" "}
                       {(
-                        (dish.price + dish.orderdishes.option_price) *
+                        (dish.price + (dish.orderdishes.option_price | 0)) *
                         dish.orderdishes.quantity
                       ).toLocaleString("vi-VN")}{" "}
                       đ
@@ -170,9 +186,9 @@ function Bill() {
                 </li>
               ))}
             </ul>
-            {selectedOrder.qr_url && (
+            {!!selectedOrder?.isShowButton && (
               <button className={cx("view-qr-button")} onClick={handleViewQr}>
-                Xem mã QR thanh toán
+                xem thanh toán
               </button>
             )}
           </div>
